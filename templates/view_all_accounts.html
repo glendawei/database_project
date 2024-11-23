@@ -6,14 +6,73 @@
     <title>All Accounts</title>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
     <h1>All Registered Accounts</h1>
-    <table>
+
+    <!-- Search Form -->
+    <form method="get" action="{{ url_for('admin.view_all_accounts') }}" style="display: flex; justify-content: space-between; width: 80%">
+        <div>
+            <label for="customer_id">Customer ID:</label>
+            <input type="text" id="customer_id" name="customer_id">
+            <br>    
+        </div>
+        <div>
+            <label for="balance_comparison">Balance:</label>
+            <select id="balance_comparison" name="balance_comparison">
+                <option value="">--Select--</option>
+                <option value="over">Over</option>
+                <option value="under">Under</option>
+            </select>
+            <input type="number" id="balance_value" name="balance_value" step="0.01">
+            <br>
+        </div>
+        <div>
+        <label for="currency">Currency:</label>
+        <select id="currency" name="currency">
+            <option value="">--Select--</option>
+            <option value="TWD">TWD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <!-- Add more currency options as needed -->
+        </select>
+        <br>
+        </div>
+        <div>
+            <label for="branch_id">Branch ID:</label>
+            <select id="branch_id" name="branch_id">
+                <option value="">--Select--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <!-- Add more branch options dynamically -->
+            </select>
+            <br>
+        </div>
+        <div>
+            <label for="status">Status:</label>
+            <select id="status" name="status">
+                <option value="">--Select--</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="closed">Closed</option>
+            </select>
+            <br>
+        </div>
+        <div>
+        <button type="submit">Search</button>
+        </div>
+    </form>
+
+    <!-- Display Results -->
+    <table cellpadding="10">
         <tr>
             <th>Account ID</th>
             <th>Customer ID</th>
             <th>Balance</th>
             <th>Currency</th>
             <th>Branch ID</th>
+            <th>Status</th>
         </tr>
         {% for account in accounts %}
         <tr>
@@ -22,9 +81,18 @@
             <td>{{ account[2] }}</td>
             <td>{{ account[3] }}</td>
             <td>{{ account[4] }}</td>
+            <td>{{ account[5] }}</td>
+            <td>
+                <form action="{{ url_for('admin.account_info') }}" method="get">
+                    <input type="hidden" name="account_id" value="{{ account[0] }}">
+                    <button type="submit">More Info</button>
+                </form>
+            </td>
+            
         </tr>
         {% endfor %}
     </table>
+
     <br>
     <form action="/admin/admin_dashboard" method="get">
         <button type="submit">Back to Admin Dashboard</button>

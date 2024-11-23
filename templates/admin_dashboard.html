@@ -6,19 +6,21 @@
     <title>Admin Dashboard</title>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
     <h1>Admin Dashboard</h1>
-    <form action="/admin/view_all_accounts" method="get">
-        <button type="submit">View All Accounts</button>
-    </form>
-    <form action="/admin/approve_loan" method="get">
-        <button type="submit">Approve Loan Requests</button>
-    </form>
-    <form action="/admin/view_all_transactions" method="get">
-        <button type="submit">View All Transactions</button>
-    </form>
-    <a href="{{ url_for('home') }}"><button>Logout</button></a>
-   
-    
+    <div style="display: flex;">
+        <form action="/admin/view_all_accounts" method="get" style="padding-left: 2px; padding-right: 2px;">
+            <button type="submit">View All Accounts</button>
+        </form>
+        <form action="/admin/approve_loan" method="get" style="padding-left: 2px; padding-right: 2px;">
+            <button type="submit">Approve Loan Requests</button>
+        </form>
+        <form action="/admin/view_all_transactions" method="get" style="padding-left: 2px; padding-right: 2px;">
+            <button type="submit">View All Transactions</button>
+        </form>
+        <a href="{{ url_for('home') }}" style="padding-left: 2px; padding-right: 2px;"><button>Logout</button></a>
+    </div>  
     
 </body>
 </html>

@@ -6,6 +6,8 @@
     <title>After Login</title>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
     <h1>Welcome, {{ session['AccountID'] }}</h1>
     <div>
         <a href="{{ url_for('user.check_balance') }}"><button>Check Account Balance</button></a>

@@ -6,6 +6,8 @@
     <title>Search Results</title>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
     <h1>Search Results</h1>
     {% if results %}
         <table border="1">

@@ -1,7 +1,19 @@
-<h1>Welcome to Our Application</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+</head>
+<body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
 
-<!-- User Index Link (linked to user.index) -->
-<a href="{{ url_for('user.index') }}"><button>Go to User Index</button></a>
-
-<!-- Admin Dashboard Link -->
-<a href="{{ url_for('admin.admin_dashboard') }}"><button>Admin Dashboard</button></a>
+    <h1>Welcome to Our Application</h1>
+    <div>
+    <!-- User Index Link (linked to user.index) -->
+    <a href="{{ url_for('user.index') }}"><button>Go to User Index</button></a>
+    <!-- Admin Dashboard Link -->
+    <a href="{{ url_for('admin.admin_dashboard') }}"><button>Admin Dashboard</button></a>
+    </div>
+</body>
+</html>

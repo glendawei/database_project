@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Information</title>
+</head>
+<body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('admin.view_all_accounts') }}"><button>Back to All Accounts</button></a>
+
+    <h1>Account Information</h1>
+
+    <table cellpadding="10">
+        <tr>
+            <th>Field</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>Account ID</td>
+            <td>{{ account[0] }}</td>
+        </tr>
+        <tr>
+            <td>Customer ID</td>
+            <td>{{ account[1] }}</td>
+        </tr>
+        <tr>
+            <td>Balance</td>
+            <td>{{ account[2] }}</td>
+        </tr>
+        <tr>
+            <td>Currency</td>
+            <td>{{ account[3] }}</td>
+        </tr>
+        <tr>
+            <td>Branch ID</td>
+            <td>{{ account[4] }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ account[5] }}</td>
+        </tr>
+        <tr>
+            <td>Creation Date</td>
+            <td>{{ account[6] }}</td>
+        </tr>
+        <tr>
+            <td>Last Transaction Date</td>
+            <td>{{ account[7] }}</td>
+        </tr>
+    </table>
+
+    <div>
+        <h2>Loan Information</h2>
+        <table cellpadding="10">
+            <tr>
+                <th>Loan ID</th>
+                <th>Loan Type</th>
+                <th>Principal Amount</th>
+                <th>Status</th>
+                <th>Interest Rate</th>
+                <th>Start Date</th>
+                <th>Duration</th>
+            </tr>
+            {% for loan in loans %}
+            <tr>
+                <td>{{ loan[0] }}</td>
+                <td>{{ loan[1] }}</td>
+                <td>{{ loan[2] }}</td>
+                <td>{{ loan[3] }}</td>
+                <td>{{ loan[4] }}</td>
+                <td>{{ loan[5] }}</td>
+                <td>{{ loan[6] }}</td>
+            </tr>
+            {% endfor %}
+            
+        </table>
+    </div>
+    <div>
+        <h2>Card Information</h2>
+        <table cellpadding="10">
+        {% if creditcards %}
+            {% for card in creditcards %}
+            <tr>
+                <th>Card ID</th>
+                <th>Branch ID</th>
+                <th>Issue Date</th>
+                <th>Expiry Date</th>
+                <th>Interest Rate</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>CVN</th>
+                <th>Number</th>
+            </tr>
+            <tr>
+                <td>{{ card[0] }}</td>
+                <td>{{ card[1] }}</td>
+                <td>{{ card[2] }}</td>
+                <td>{{ card[3] }}</td>
+                <td>{{ card[4] }}</td>
+                <td>{{ card[5] }}</td>
+                <td>{{ card[6] }}</td>
+                <td>{{ card[7] }}</td>
+
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6">No credit cards found.</td>
+            </tr>
+        {% endif %}
+        </table>
+    </div>
+
+</body>
+</html>

@@ -6,6 +6,8 @@
     <title>Credit Card Request</title>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
     <h1>Credit Card Request Form</h1>
     <form action="{{ url_for('user.credit_card') }}" method="POST">
         <label for="CardID">Card ID:</label>

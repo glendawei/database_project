@@ -18,17 +18,53 @@ def admin_dashboard():
     return render_template('admin_dashboard.html')
 
 # View all accounts
-@admin_bp.route('/view_all_accounts')
+@admin_bp.route('/view_all_accounts', methods=['GET', 'POST'])
 def view_all_accounts():
     conn = get_db_connection()
-    if conn:
-        cursor = conn.cursor()
-        cursor.execute('SELECT AccountID, CustomerID, Balance, Currency, BranchID FROM Account')
-        accounts = cursor.fetchall()
-        conn.close()
-        return render_template('view_all_accounts.html', accounts=accounts)
-    else:
+    if not conn:
         return "Database connection error", 500
+
+    cursor = conn.cursor()
+
+    # Build the base query
+    query = "SELECT AccountID, CustomerID, Balance, Currency, BranchID, Status FROM Account WHERE 1=1"
+    filters = []
+
+    # Collect filter values from request.args
+    customer_id = request.args.get('customer_id')
+    balance_comparison = request.args.get('balance_comparison')
+    balance_value = request.args.get('balance_value')
+    currency = request.args.get('currency')
+    branch_id = request.args.get('branch_id')
+    status = request.args.get('status')
+
+    # Add conditions based on the filters
+    if customer_id:
+        query += " AND CustomerID = %s"
+        filters.append(customer_id)
+    if balance_comparison and balance_value:
+        if balance_comparison == "over":
+            query += " AND Balance > %s"
+        elif balance_comparison == "under":
+            query += " AND Balance < %s"
+        filters.append(balance_value)
+    if currency:
+        query += " AND Currency = %s"
+        filters.append(currency)
+    if branch_id:
+        query += " AND BranchID = %s"
+        filters.append(branch_id)
+    if status:
+        query += " AND Status = %s"
+        filters.append(status)
+
+    # Execute the query
+    cursor.execute(query, filters)
+    accounts = cursor.fetchall()
+    conn.close()
+
+    return render_template('view_all_accounts.html', accounts=accounts)
+
 
 # View all loan requests
 @admin_bp.route('/approve_loan', methods=['GET'])
@@ -42,6 +78,60 @@ def approve_loan():
         return render_template('approve_loan.html', loan_requests=loan_requests)
     else:
         return "Database connection error", 500
+    
+@admin_bp.route('/account_info', methods=['GET'])
+def account_info():
+    account_id = request.args.get('account_id')
+    
+    if not account_id:
+        return "Account ID not provided", 400
+
+    conn = get_db_connection()
+    if not conn:
+        return "Database connection error", 500
+
+    cursor = conn.cursor()
+
+    # Query for detailed account information
+    query = """
+    SELECT *
+    FROM Account
+    WHERE AccountID = %s
+    """
+    cursor.execute(query, (account_id,))
+    account_details = cursor.fetchone()
+
+    query = """
+        SELECT *
+        FROM Loan
+        WHERE CustomerID IN (
+            SELECT CustomerID
+            FROM Account
+            WHERE AccountID = %s
+        )
+    """
+    cursor.execute(query, (account_id,))
+    loan_details = cursor.fetchall()  # Use fetchall() if expecting multiple rows
+
+
+    query = """
+        SELECT *
+        FROM Creditcard
+        WHERE Customerid IN
+        (SELECT Customerid
+         FROM Account
+         WHERE AccountID = %s)
+    """
+    cursor.execute(query, (account_id,))
+    creditcard_details = cursor.fetchone()
+
+    conn.close()
+
+    if not account_details:
+        return f"No account found with Account ID {account_id}", 404
+
+    return render_template('account_info.html', account=account_details, loans=loan_details, creditcards=creditcard_details)
+
 
 # Approve loan request
 @admin_bp.route('/approve_loan/<loan_id>', methods=['POST'])

@@ -6,6 +6,8 @@
     <title>Account Balance</title>
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
     <h1>Your Account Balance</h1>
     <p>Balance: {{ balance }}</p>
     <a href="{{ url_for('user.afterlogin') }}">Back</a>

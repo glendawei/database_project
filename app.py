@@ -26,4 +26,4 @@ def home():
     return render_template('home.html')  # Home page with 4 buttons: Register, Login, Loans, Credit Card
 
 if __name__ == '__main__':
-    app.run(debug=True, port=6661)
+    app.run(debug=True, port=5678)
