@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <form action="/admin/view_all_accounts" method="get">
+        <button type="submit">View All Accounts</button>
+    </form>
+    <form action="/admin/approve_loan" method="get">
+        <button type="submit">Approve Loan Requests</button>
+    </form>
+    <form action="/admin/view_all_transactions" method="get">
+        <button type="submit">View All Transactions</button>
+    </form>
+    <a href="{{ url_for('home') }}"><button>Logout</button></a>
+   
+    
+    
+</body>
+</html>

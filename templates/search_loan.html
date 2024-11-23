@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Search for Customer</title>
+</head>
+<body>
+    <h1>Loan Search for Customer</h1>
+
+    {% if loans %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Loan ID</th>
+                <th>Loan Type</th>
+                <th>Amount</th>
+                <th>Interest Rate</th>
+                <th>Loan Start Date</th>
+                <th>Term (Months)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for loan in loans %}
+                <tr>
+                    <td>{{ loan[0] }}</td>
+                    <td>{{ loan[1] }}</td>
+                    <td>{{ loan[2] }}</td>
+                    <td>{{ loan[3] }}%</td>  <!-- Add percentage sign to interest rate -->
+                    <td>{{ loan[4] }}</td>  <!-- StartDate is now loan[4] (index adjustment) -->
+                    <td>{{ loan[5] }}</td>  <!-- Duration (Term in months) is loan[5] -->
+                    <td>
+                        <!-- Form to select the loan and go to the payment page -->
+                        <form action="{{ url_for('user.search_loan') }}" method="post">
+                            <!-- Send all loan details as hidden inputs -->
+                            <input type="hidden" name="loan_id" value="{{ loan[0] }}">
+                            <input type="hidden" name="loan_type" value="{{ loan[1] }}">
+                            <input type="hidden" name="amount" value="{{ loan[2] }}">
+                            <input type="hidden" name="interest_rate" value="{{ loan[3] }}">
+                            <input type="hidden" name="start_date" value="{{ loan[4] }}">
+                            <input type="hidden" name="term_months" value="{{ loan[5] }}">
+                            <button type="submit">Select</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>No loans found for the given Customer ID.</p>
+    {% endif %}
+
+    <!-- Logout link -->
+    <a href="{{ url_for('user.customer_logout') }}">Logout</a>
+</body>
+</html>

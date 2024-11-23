@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Loan</title>
+</head>
+<body>
+    <h1>Approve Loan Requests</h1>
+    <table>
+        <tr>
+            <th>Loan ID</th>
+            <th>Loan Type</th>
+            <th>Principal Amount</th>
+            <th>Duration</th>
+            <th>Customer ID</th>
+            <th>Approve</th>
+        </tr>
+        {% for loan in loan_requests %}
+        <tr>
+            <td>{{ loan[0] }}</td>
+            <td>{{ loan[1] }}</td>
+            <td>{{ loan[2] }}</td>
+            <td>{{ loan[3] }}</td>
+            <td>{{ loan[4] }}</td>
+            <td>
+                <form action="/admin/approve_loan/{{ loan[0] }}" method="post">
+                    <button type="submit">Approve</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="/admin/admin_dashboard" method="get">
+        <button type="submit">Back to Admin Dashboard</button>
+    </form>
+</body>
+</html>

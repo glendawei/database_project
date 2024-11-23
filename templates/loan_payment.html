@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Payment</title>
+</head>
+<body>
+    <h1>Loan Payment</h1>
+    {% if success %}
+        <p style="color: green;">Payment successful!</p>
+    {% endif %}
+    {% if loan %}
+        <p><strong>Loan ID:</strong> {{ loan[0] }}</p>
+        <p><strong>Principal Amount:</strong> {{ loan[1] }}</p>
+        <p><strong>Interest Rate:</strong> {{ loan[2] }}%</p>
+        <form action="/user/loan_payment" method="POST">
+            <label for="PaymentAmount">Enter Payment Amount:</label>
+            <input type="number" name="PaymentAmount" id="PaymentAmount" required>
+            <button type="submit">Submit Payment</button>
+        </form>
+    {% else %}
+        <p>No loan details found.</p>
+    {% endif %}
+    <p><a href="{{ url_for('user.search_loan') }}">Back to Loan Results</a></p>
+</body>
+</html>

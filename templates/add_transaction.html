@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Transaction</title>
+</head>
+<body>
+    <h1>Add a Transaction</h1>
+    <form method="POST">
+
+        <label for="Amount">Amount:</label>
+        <input type="number" id="Amount" name="Amount" required><br><br>
+
+        <label for="TransactionAccountID">Transaction Account ID:</label>
+        <input type="text" id="TransactionAccountID" name="TransactionAccountID" required><br><br>
+
+        <label for="Description">Description:</label>
+        <textarea id="Description" name="Description"></textarea><br><br>
+
+        <button type="submit">Submit Transaction</button>
+    </form>
+
+    <a href="{{ url_for('user.afterlogin') }}">Back</a>
+</body>
+</html>

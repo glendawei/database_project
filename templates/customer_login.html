@@ -1,0 +1,23 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login</title>
+</head>
+<body>
+    <h1>Customer Login</h1>
+
+    <!-- Login Form -->
+    <form action="/user/customer_login" method="POST">
+        <label for="CustomerID">Customer ID</label>
+        <input type="text" id="CustomerID" name="CustomerID" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- Link back to Home (index.html) -->
+    <p><a href="{{ url_for('user.index') }}">Back to User Index</a>
+
+</body>
+</html>

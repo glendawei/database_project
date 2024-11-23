@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction Records</title>
+</head>
+<body>
+    <h1>Your Transaction Records</h1>
+    <table border="1">
+        <tr>
+            <th>Transaction ID</th>
+            <th>Transaction Type</th>
+            <th>Transaction Account</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction[0] }}</td>  <!-- TransactionID -->
+                <td>{{ transaction[1] }}</td>  <!-- transactiontype -->
+                <td>{{ transaction[2] }}</td>  <!-- transactionaccount -->
+                <td>{{ transaction[3] }}</td>  <!-- Amount -->
+                <td>{{ transaction[4] }}</td>  <!-- Description -->
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="{{ url_for('user.afterlogin') }}">Back</a>
+</body>
+</html>

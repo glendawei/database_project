@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Accounts</title>
+</head>
+<body>
+    <h1>All Registered Accounts</h1>
+    <table>
+        <tr>
+            <th>Account ID</th>
+            <th>Customer ID</th>
+            <th>Balance</th>
+            <th>Currency</th>
+            <th>Branch ID</th>
+        </tr>
+        {% for account in accounts %}
+        <tr>
+            <td>{{ account[0] }}</td>
+            <td>{{ account[1] }}</td>
+            <td>{{ account[2] }}</td>
+            <td>{{ account[3] }}</td>
+            <td>{{ account[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="/admin/admin_dashboard" method="get">
+        <button type="submit">Back to Admin Dashboard</button>
+    </form>
+</body>
+</html>

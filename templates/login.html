@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form method="POST">
+        <label for="AccountID">Account ID:</label>
+        <input type="text" id="AccountID" name="AccountID" required><br><br>
+
+        <label for="Password">Password:</label>
+        <input type="password" id="Password" name="Password" required><br><br>
+
+        <button type="submit">Login</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <a href="{{ url_for('user.index') }}">Back to User Index</a>
+</body>
+</html>

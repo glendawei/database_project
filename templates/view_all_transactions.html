@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Transactions</title>
+</head>
+<body>
+    <h1>All Transactions</h1>
+    <table>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Account ID</th>
+            <th>Transaction Type</th>
+            <th>Amount</th>
+            <th>Description</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction[0] }}</td>
+            <td>{{ transaction[1] }}</td>
+            <td>{{ transaction[2] }}</td>
+            <td>{{ transaction[3] }}</td>
+            <td>{{ transaction[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <form action="/admin/admin_dashboard" method="get">
+        <button type="submit">Back to Admin Dashboard</button>
+    </form>
+</body>
+</html>
