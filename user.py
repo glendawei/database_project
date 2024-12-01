@@ -187,6 +187,18 @@ def add_transaction():
         try:
             conn = get_db_connection()
             cur = conn.cursor()
+
+            # Check if payer has sufficient balance
+            cur.execute("""
+                DO $$ 
+                BEGIN
+                    IF (SELECT Balance FROM ACCOUNT WHERE AccountID = %s) < %s THEN
+                        RAISE EXCEPTION 'Insufficient balance';
+                    END IF;
+                END $$;
+            """, (session['AccountID'], data['Amount']))
+
+            # First transaction (debit from payer)
             cur.execute("""
                 INSERT INTO TRANSACTION (
                     TransactionID, TransactionType, Status, Description, 
@@ -198,9 +210,11 @@ def add_transaction():
                 session['AccountID'], data['TransactionAccount']  
             ))
 
+            # Generate new transaction ID for the reverse transaction
             transaction_id = f"{session['AccountID']}_{int(datetime.now().timestamp())}_R"
             data['TransactionID'] = transaction_id
 
+            # Second transaction (credit to recipient)
             cur.execute("""
                 INSERT INTO TRANSACTION (
                     TransactionID, TransactionType, Status, Description, 
@@ -211,7 +225,8 @@ def add_transaction():
                 data['RequestTime'], data['CompleteTime'], data['Amount'], 
                 data['TransactionAccount'], session['AccountID']  
             ))
-            # update the balance
+
+            # Update balances for both accounts
             cur.execute("""
                 UPDATE ACCOUNT
                 SET Balance = Balance - %s
@@ -226,13 +241,14 @@ def add_transaction():
             conn.commit()
         except Exception as e:
             conn.rollback()
-            return jsonify({"error": str(e)}), 500
+            # Pass specific error to the template if related to balance
+            error_message = "Insufficient balance" if 'Insufficient balance' in str(e) else "An error occurred"
+            return render_template('add_transaction.html', error=error_message)
         finally:
             cur.close()
             conn.close()
 
         return redirect(url_for('user.afterlogin'))  # Redirect to afterlogin page after successful transaction
-
     return render_template('add_transaction.html')
 
 

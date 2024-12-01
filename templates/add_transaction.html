@@ -4,13 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Transaction</title>
+    <style>
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;">
+        <button>Home</button>
+    </a>
 
     <h1>Add a Transaction</h1>
-    <form method="POST">
 
+    <!-- Display error message if exists -->
+    {% if error %}
+        <div class="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
         <label for="Amount">Amount:</label>
         <input type="number" id="Amount" name="Amount" required><br><br>
 
