@@ -187,17 +187,8 @@ def add_transaction():
         try:
             conn = get_db_connection()
             cur = conn.cursor()
-
-            # Check if payer has sufficient balance
-            cur.execute("""
-                DO $$ 
-                BEGIN
-                    IF (SELECT Balance FROM ACCOUNT WHERE AccountID = %s) < %s THEN
-                        RAISE EXCEPTION 'Insufficient balance';
-                    END IF;
-                END $$;
-            """, (session['AccountID'], data['Amount']))
-
+            cur.execute('BEGIN;')
+        
             # First transaction (debit from payer)
             cur.execute("""
                 INSERT INTO TRANSACTION (
@@ -225,18 +216,25 @@ def add_transaction():
                 data['RequestTime'], data['CompleteTime'], data['Amount'], 
                 data['TransactionAccount'], session['AccountID']  
             ))
-
-            # Update balances for both accounts
             cur.execute("""
-                UPDATE ACCOUNT
-                SET Balance = Balance - %s
-                WHERE AccountID = %s
-            """, (data['Amount'], session['AccountID']))
-            cur.execute("""
-                UPDATE ACCOUNT
-                SET Balance = Balance + %s
-                WHERE AccountID = %s
-            """, (data['Amount'], data['TransactionAccount']))
+                    DO $$ 
+                    BEGIN
+                        -- Lock the sender account row to prevent other transactions from accessing it
+                        -- Check if the balance is sufficient
+                        IF (SELECT Balance FROM ACCOUNT WHERE AccountID = %s FOR UPDATE) < %s THEN
+                            RAISE EXCEPTION 'Insufficient balance';
+                        ELSE
+                            -- Deduct the amount from the sender's account
+                            UPDATE ACCOUNT
+                            SET Balance = Balance - %s
+                            WHERE AccountID = %s;
+                            -- Credit the amount to the recipient's account
+                            UPDATE ACCOUNT
+                            SET Balance = Balance + %s
+                            WHERE AccountID = %s;
+                        END IF;
+                    END $$;
+                """, (session['AccountID'], data['Amount'], data['Amount'], session['AccountID'], data['Amount'], data['TransactionAccount']))
 
             conn.commit()
         except Exception as e:
