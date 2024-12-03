@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Data Import</title>
+</head>
+<body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
+    <h1>Bulk Data Import</h1>
+    <form action="/admin/import" method="post" enctype="multipart/form-data">
+        <label for="file">Upload CSV file:</label>
+        <input type="file" name="file" id="file" accept=".csv" required>
+        <button type="submit">Upload</button>
+    </form>
+    <div id="status"></div>
+</body>
+<script>
+    const form = document.querySelector('form');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        statusDiv.textContent = 'Uploading...';
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                statusDiv.textContent = data.message;
+            } else {
+                const errorData = await response.json();
+                statusDiv.textContent = `Error: ${errorData.error}`;
+            }
+        } catch (err) {
+            statusDiv.textContent = `Error: ${err.message}`;
+        }
+    });
+</script>
+</html>
