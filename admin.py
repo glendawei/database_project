@@ -1,20 +1,21 @@
-import logging, csv, io
-from flask import flash
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
-import psycopg2
+import logging, csv, io, psycopg2, uuid
+from flask import flash, request, jsonify, render_template, redirect, url_for, session, Blueprint
 from datetime import datetime, timedelta
-from flask import Blueprint, render_template, request, redirect, url_for
-import csv
-import io
 from werkzeug.utils import secure_filename
-import uuid
-from dateutil.relativedelta import relativedelta
 from db import get_db_connection
-from flask import Blueprint
 from threading import Lock
 
 import_lock = Lock()
 admin_bp = Blueprint('admin', __name__)
+ALLOWED_EXTENSIONS = {'csv'}
+
+conn = get_db_connection()
+cursor = conn.cursor()
+cursor.execute("CREATE INDEX idx_account_customerid ON account (customerid);")
+cursor.execute("CREATE INDEX idx_account_dateopened ON account (dateopened);")
+cursor.execute("CREATE INDEX idx_account_balance ON account (balance);")
+cursor.close()
+conn.close()
 
 @admin_bp.route('/view_all_customers', methods=['GET'])
 def view_all_data():
@@ -163,8 +164,6 @@ def view_all_data():
     # Return the data or render template as needed
     return render_template('view_all_customer.html', data=data)
 
-
-
 @admin_bp.route('/admin_dashboard')
 def admin_dashboard():
     return render_template('admin_dashboard.html')
@@ -216,7 +215,6 @@ def view_all_accounts():
     conn.close()
 
     return render_template('view_all_accounts.html', accounts=accounts)
-
 
 # View all loan requests
 @admin_bp.route('/approve_loan', methods=['GET'])
@@ -283,7 +281,6 @@ def account_info():
         return f"No account found with Account ID {account_id}", 404
 
     return render_template('account_info.html', account=account_details, loans=loan_details, creditcards=creditcard_details)
-
 
 # Approve loan request
 @admin_bp.route('/approve_loan/<loan_id>', methods=['POST'])
@@ -359,7 +356,6 @@ def approve_single_loan(loan_id):
         conn.close()
 
     return redirect(url_for('admin.approve_loan'))
-
 
 # View all transactions
 @admin_bp.route('/view_all_transactions')
@@ -444,9 +440,6 @@ def bulk_import():
 
 
             admin_bp = Blueprint('admin_bp', __name__)
-
-# Define allowed file extensions
-ALLOWED_EXTENSIONS = {'csv'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
