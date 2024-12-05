@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Data</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f4f4f4; }
+        .hidden { display: none; }
+        .controls { margin-bottom: 20px; }
+    </style>
+    <script>
+        function toggleColumn(colIndex, checkbox) {
+            const table = document.querySelector("table");
+            const rows = table.querySelectorAll("tr");
+            rows.forEach(row => {
+                const cells = row.querySelectorAll("th, td");
+                if (cells[colIndex]) {
+                    cells[colIndex].classList.toggle("hidden", !checkbox.checked);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Customer Data</h1>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
+    <!-- Filters -->
+    <form method="get" class="filter-form" style="width: 1200px;">
+        <h3>Filter Options</h3>
+        <input type="text" name="search" placeholder="Search Name, Email, Phone">
+        <input type="number" name="min_balance" placeholder="Min Balance">
+        <input type="number" name="max_balance" placeholder="Max Balance">
+        <input type="number" name="num_of_account" placeholder="Minimum Account Opened" style="width: 385px;">
+        <select name="loan_status">
+            <option value="">Loan Status</option>
+            <option value="W">Pending</option>
+            <option value="A">Approved</option>
+        </select>
+        <br>
+        <input type="number" name="min_loan_amount" placeholder="Min Loan Amount">
+        <input type="number" name="max_loan_amount" placeholder="Max Loan Amount">
+        <input type="number" name="min_payment_amount" placeholder="Min Payment">
+        <input type="number" name="max_payment_amount" placeholder="Max Payment">
+        <input type="date" name="start_date">
+        <input type="date" name="end_date">
+        <button type="submit">Apply Filters</button>
+    </form>
+
+    <!-- Column Toggles -->
+    <div class="controls">
+        <h3>Toggle Columns</h3>
+        <label><input type="checkbox" checked onchange="toggleColumn(0, this)"> Customer ID</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(1, this)"> Name</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(2, this)"> Phone</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(3, this)"> Email</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(4, this)"> Account Count</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(5, this)"> Total Balance</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(6, this)"> Loan Count</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(7, this)"> Total Loan Amount</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(8, this)"> Payment Count</label>
+        <label><input type="checkbox" checked onchange="toggleColumn(9, this)"> Total Payment Amount</label>
+    </div>
+
+    <!-- Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Account Count</th>
+                <th>Total Balance</th>
+                <th>Loan Count</th>
+                <th>Total Loan Amount</th>
+                <th>Payment Count</th>
+                <th>Total Payment Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+                <td>{{ row[7] }}</td>
+                <td>{{ row[8] }}</td>
+                <td>{{ row[9] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

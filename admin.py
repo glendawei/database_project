@@ -1,17 +1,168 @@
-import logging
-from flask import flash
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
-import psycopg2
+import logging, csv, io, psycopg2, uuid
+from flask import flash, request, jsonify, render_template, redirect, url_for, session, Blueprint
 from datetime import datetime, timedelta
-import uuid
-from dateutil.relativedelta import relativedelta
+from werkzeug.utils import secure_filename
 from db import get_db_connection
-from flask import Blueprint
+from threading import Lock
 
-
+import_lock = Lock()
 admin_bp = Blueprint('admin', __name__)
+ALLOWED_EXTENSIONS = {'csv'}
+
+conn = get_db_connection()
+cursor = conn.cursor()
+cursor.execute("CREATE INDEX idx_account_customerid ON account (customerid);")
+cursor.execute("CREATE INDEX idx_account_dateopened ON account (dateopened);")
+cursor.execute("CREATE INDEX idx_account_balance ON account (balance);")
+cursor.close()
+conn.close()
+
+@admin_bp.route('/view_all_customers', methods=['GET'])
+def view_all_data():
+    # Base SQL query with CTEs
+    AGGREGATE_QUERY = """
+    WITH AccountSummary AS (
+        SELECT 
+            customerid, 
+            COUNT(accountid) AS account_count, 
+            COALESCE(SUM(balance), 0) AS total_balance, 
+            MIN(dateopened) AS first_account_opened, 
+            MAX(dateopened) AS latest_account_opened
+        FROM account
+        GROUP BY customerid
+    ),
+    LoanSummary AS (
+        SELECT 
+            customerid, 
+            COUNT(loanid) AS loan_count, 
+            COALESCE(SUM(principalamount), 0) AS total_loan_amount
+        FROM loan
+        GROUP BY customerid
+    ),
+    PaymentSummary AS (
+        SELECT 
+            l.customerid, 
+            COUNT(lp.paymentid) AS payment_count, 
+            COALESCE(SUM(lp.amount), 0) AS total_payment_amount
+        FROM loanpayment lp
+        JOIN loan l ON lp.loanid = l.loanid
+        GROUP BY l.customerid
+    )
+    SELECT 
+        c.customerid, 
+        c.name, 
+        c.phonenumber, 
+        c.email, 
+        COALESCE(a.account_count, 0) AS account_count, 
+        COALESCE(a.total_balance, 0) AS total_balance, 
+        COALESCE(l.loan_count, 0) AS loan_count, 
+        COALESCE(l.total_loan_amount, 0) AS total_loan_amount, 
+        COALESCE(p.payment_count, 0) AS payment_count, 
+        COALESCE(p.total_payment_amount, 0) AS total_payment_amount,
+        COALESCE(a.first_account_opened, NULL) AS first_account_opened, 
+        COALESCE(a.latest_account_opened, NULL) AS latest_account_opened
+    FROM 
+        customer c
+    LEFT JOIN 
+        AccountSummary a ON c.customerid = a.customerid
+    LEFT JOIN 
+        LoanSummary l ON c.customerid = l.customerid
+    LEFT JOIN 
+        PaymentSummary p ON c.customerid = p.customerid
+    WHERE 
+        1=1 -- Placeholder for dynamic filters
+    """
+
+    # Collect filters from request arguments
+    filters = []
+    params = {}
+
+    # Search Filter
+    search = request.args.get('search', '').strip()
+    if search:
+        filters.append("(c.name ILIKE %(search)s OR c.email ILIKE %(search)s OR c.phonenumber ILIKE %(search)s)")
+        params['search'] = f"%{search}%"
+
+    # Balance Filters
+    min_balance = request.args.get('min_balance')
+    if min_balance:
+        filters.append("COALESCE(SUM(a.balance), 0) >= %(min_balance)s")
+        params['min_balance'] = min_balance
+
+    max_balance = request.args.get('max_balance')
+    if max_balance:
+        filters.append("COALESCE(account_count, 0) <= %(max_balance)s")
+        params['max_balance'] = max_balance
+
+    num_of_account = request.args.get('num_of_account')
+    if num_of_account:
+        filters.append("a.account_count >= %(num_of_account)s")
+        params['num_of_account'] = num_of_account
 
 
+    # Loan Filters
+    loan_status = request.args.get('loan_status')
+    if loan_status:
+        filters.append("l.status = %(loan_status)s")
+        params['loan_status'] = loan_status
+
+    min_loan_amount = request.args.get('min_loan_amount')
+    if min_loan_amount:
+        filters.append("l.total_loan_amount >= %(min_loan_amount)s")
+        params['min_loan_amount'] = min_loan_amount
+
+    max_loan_amount = request.args.get('max_loan_amount')
+    if max_loan_amount:
+        filters.append("l.total_loan_amount <= %(max_loan_amount)s")
+        params['max_loan_amount'] = max_loan_amount
+
+    # Payment Filters
+    payment_status = request.args.get('payment_status')
+    if payment_status:
+        filters.append("lp.status = %(payment_status)s")
+        params['payment_status'] = payment_status
+
+    min_payment_amount = request.args.get('min_payment_amount')
+    if min_payment_amount:
+        filters.append("lp.amount >= %(min_payment_amount)s")
+        params['min_payment_amount'] = min_payment_amount
+
+    max_payment_amount = request.args.get('max_payment_amount')
+    if max_payment_amount:
+        filters.append("lp.amount <= %(max_payment_amount)s")
+        params['max_payment_amount'] = max_payment_amount
+
+    # Date Filters
+    start_date = request.args.get('start_date')
+    if start_date:
+        filters.append("MIN(a.dateopened) >= %(start_date)s")
+        params['start_date'] = start_date
+
+    end_date = request.args.get('end_date')
+    if end_date:
+        filters.append("MAX(a.dateopened) <= %(end_date)s")
+        params['end_date'] = end_date
+
+    # Apply filters to the query
+    if filters:
+        AGGREGATE_QUERY += " AND " + " AND ".join(filters)
+
+    # Order and limit the query
+    AGGREGATE_QUERY += """
+    ORDER BY 
+        c.name;
+    """
+
+    # Execute query
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(AGGREGATE_QUERY, params)
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    # Return the data or render template as needed
+    return render_template('view_all_customer.html', data=data)
 
 @admin_bp.route('/admin_dashboard')
 def admin_dashboard():
@@ -64,7 +215,6 @@ def view_all_accounts():
     conn.close()
 
     return render_template('view_all_accounts.html', accounts=accounts)
-
 
 # View all loan requests
 @admin_bp.route('/approve_loan', methods=['GET'])
@@ -132,7 +282,6 @@ def account_info():
 
     return render_template('account_info.html', account=account_details, loans=loan_details, creditcards=creditcard_details)
 
-
 # Approve loan request
 @admin_bp.route('/approve_loan/<loan_id>', methods=['POST'])
 def approve_single_loan(loan_id):
@@ -144,16 +293,21 @@ def approve_single_loan(loan_id):
     cursor = conn.cursor()
 
     try:
-        # Fetch loan details for the given loan_id
+        # Lock the loan row for update
         cursor.execute(
-            'SELECT principalamount, interestrate, duration, startdate FROM Loan WHERE loanid = %s AND status = %s',
+            '''
+            SELECT principalamount, interestrate, duration, startdate
+            FROM Loan
+            WHERE loanid = %s AND status = %s
+            FOR UPDATE
+            ''',
             (loan_id, 'W')
         )
         loan_details = cursor.fetchone()
 
         if not loan_details:
             flash("Loan not found or already approved.", "danger")
-            return redirect(url_for('admin.admin.approve_loan'))
+            return redirect(url_for('admin.approve_loan'))
 
         # Extract loan details
         principal, rate, duration, start_date = loan_details
@@ -203,7 +357,6 @@ def approve_single_loan(loan_id):
 
     return redirect(url_for('admin.approve_loan'))
 
-
 # View all transactions
 @admin_bp.route('/view_all_transactions')
 def view_all_transactions():
@@ -217,4 +370,107 @@ def view_all_transactions():
     else:
         return "Database connection error", 500
 
+@admin_bp.route('/admin/import', methods=['GET', 'POST'])
+def bulk_import():
+    if request.method == 'GET':
+        # Render the upload form
+        return render_template('bulk_import.html')
 
+    elif request.method == 'POST':
+        # Handle file upload
+        file = request.files.get('file')
+        if not file or not file.filename.endswith('.csv'):
+            return jsonify({'error': 'Invalid file format. Please upload a CSV file.'}), 400
+
+        # Acquire the import lock
+        if not import_lock.acquire(blocking=False):
+            return jsonify({'error': 'Another import process is running. Please try again later.'}), 429
+
+        try:
+            # Connect to the database
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+            # Use write locks for tables being updated
+            cursor.execute("LOCK TABLE customer IN EXCLUSIVE MODE;")
+            cursor.execute("LOCK TABLE account IN EXCLUSIVE MODE;")
+
+            # Read CSV file
+            csv_data = csv.reader(file.stream)
+
+            # Skip the header
+            headers = next(csv_data, None)
+
+            # Validate headers (example headers: customerid, name, email, phonenumber, etc.)
+            expected_headers = ['customerid', 'name', 'phonenumber', 'email', 'gender', 'address', 'datejoined', 'birthday']
+            if headers != expected_headers:
+                return jsonify({'error': 'Invalid CSV format. Please check the header names.'}), 400
+
+            # Insert data into the database
+            for row in csv_data:
+                try:
+                    cursor.execute(
+                        """
+                        INSERT INTO customer (customerid, name, phonenumber, email, gender, address, datejoined, birthday)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (customerid) DO UPDATE
+                        SET name = EXCLUDED.name, phonenumber = EXCLUDED.phonenumber, email = EXCLUDED.email,
+                            gender = EXCLUDED.gender, address = EXCLUDED.address, datejoined = EXCLUDED.datejoined, birthday = EXCLUDED.birthday;
+                        """,
+                        row
+                    )
+                except Exception as e:
+                    print(f"Error inserting row {row}: {e}")
+
+            # Commit the transaction
+            conn.commit()
+
+            # Close connection
+            cursor.close()
+            conn.close()
+
+            return render_template('bulk_import.html', message='Import successful!')        
+        except Exception as e:
+            # Rollback in case of error
+            conn.rollback()
+            return render_template('data_import.html', error=f"An error occurred: {str(e)}")
+        finally:
+            # Release the lock
+            import_lock.release()
+
+
+            admin_bp = Blueprint('admin_bp', __name__)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+# Route for displaying the CSV import page
+@admin_bp.route('/import_customers', methods=['GET', 'POST'])
+def import_customers():
+    if request.method == 'POST':
+        file = request.files['file']
+        
+        # Check if the file exists and is allowed
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            # Read the CSV data
+            stream = io.StringIO(file.read().decode('utf-8'), newline=None)
+            csv_reader = csv.DictReader(stream)
+            
+            # Connect to the database
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            
+            # Insert customer data from CSV
+            for row in csv_reader:
+                cursor.execute("""
+                    INSERT INTO customer (customerid, name, phonenumber, email, gender, address, datejoined, birthday)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (customerid) DO NOTHING;
+                """, (row['customerid'], row['name'], row['phonenumber'], row['email'], row['gender'], row['address'], row['datejoined'], row['birthday']))
+            
+            conn.commit()
+            cursor.close()
+            conn.close()
+
+    return render_template('import_customers.html')
