@@ -11,10 +11,13 @@
     <h1>Branch Search</h1>
     <form action="/bank/branch_search" method="POST">
         <label for="BankerID">Banker ID:</label>
-        <input type="text" id="BankerID" name="BankerID" placeholder="Enter Banker ID" required>
+        <input type="text" id="BankerID" name="BankerID" placeholder="Enter Banker ID">
+
+        <label for="BranchID">Branch ID:</label>
+        <input type="text" id="BranchID" name="BranchID" placeholder="Enter Branch ID">
 
         <label for="day">Day:</label>
-        <select id="day" name="day" required>
+        <select id="day" name="day">
             <option value="" disabled selected>Select a day</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
@@ -30,8 +33,38 @@
 
     <hr>
 
+    <!-- Table to display the results -->
+    {% if results %}
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Branch ID</th>
+                <th>Location</th>
+                <th>Phone Number</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                <td>{{ row[0] }}</td>  <!-- Branch ID -->
+                <td>{{ row[1] }}</td>  <!-- Location -->
+                <td>{{ row[2] }}</td>  <!-- Phone Number -->
+                <td>{{ row[3] }}</td>  <!-- Start Time -->
+                <td>{{ row[4] }}</td>  <!-- End Time -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No results found.</p>
+    {% endif %}
+
+    <hr>
+
     <!-- Button to go back to user.index -->
-    <a href="{{ url_for('user.index') }}" >Back to User Index</a>
+    <a href="{{ url_for('user.index') }}">Back to User Index</a>
 
 </body>
 </html>
