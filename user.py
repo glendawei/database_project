@@ -442,7 +442,7 @@ def loan_payment():
                     cur.execute("""
                         INSERT INTO LOANPAYMENT (PaymentID, LoanID, PaymentDate, Amount, Status, InterestPaid, PrinciplePaid)
                         VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    """, (payment_id, loan_id, payment_date, payment_amount, 'W', interest_paid, principal_paid))
+                    """, (payment_id, loan_id, payment_date, payment_amount, 'A', interest_paid, principal_paid))
 
                     # Update the principal amount in the LOAN table
                     cur.execute("""
