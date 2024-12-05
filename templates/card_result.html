@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Details</title>
+</head>
+<body>
+    <h1>Credit Card Details</h1>
+
+    <table border="1">
+        <tr><th>CardID</th><td>{{ card.CardID }}</td></tr>
+        <tr><th>CustomerID</th><td>{{ card.CustomerID }}</td></tr>
+        <tr><th>BranchID</th><td>{{ card.BranchID }}</td></tr>
+        <tr><th>Issue Date</th><td>{{ card.IssueDate }}</td></tr>
+        <tr><th>Expiry Date</th><td>{{ card.ExpiryDate }}</td></tr>
+        <tr><th>Interest Rate</th><td>{{ card.InterestRate }}</td></tr>
+        <tr><th>Limit</th><td>{{ card.Limit }}</td></tr>
+        <tr><th>Status</th><td>{{ card.Status }}</td></tr>
+        <tr><th>Type</th><td>{{ card.Type }}</td></tr>
+        <tr><th>CVN</th><td>{{ card.CVN }}</td></tr>
+        <tr><th>Number</th><td>{{ card.Number }}</td></tr>
+    </table>
+
+    <a href="{{ url_for('user.index') }}" >Back to User Index</a>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Login</title>
+</head>
+<body>
+    <h2>Card Login</h2>
+    <form method="POST" action="{{ url_for('card.clogin') }}">
+        <label for="CardID">Card ID:</label>
+        <input type="text" id="CardID" name="CardID" required>
+        <button type="submit">Login</button>
+    </form>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <a href="{{ url_for('user.index') }}">Back to User Index</a>
+</body>
+</html>

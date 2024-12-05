@@ -10,14 +10,9 @@
 
     <h1>Welcome to IMBank</h1>
     <div>
-        <a href="{{ url_for('user.register_account') }}"><button>Register Account</button></a>
-
-        <a href="{{ url_for('user.login') }}"><button>Login Account</button></a>
-        <a href="{{ url_for('user.loan') }}"><button>Loans</button></a>
-        <a href="{{ url_for('user.customer_login') }}"><button>Search Loans</button></a>
-        <a href="{{ url_for('user.credit_card') }}"><button>Credit Card</button></a>
-        <a href="{{ url_for('bank.branch_search') }}"><button>Branch Info</button></a>
-
+        <a href="{{ url_for('user.account') }}"><button>Account Services</button></a>
+        <a href="{{ url_for('user.aboutbank') }}"><button>About Bank</button></a>
+        <a href="{{ url_for('user.otherservice') }}"><button>Other Services</button></a>
     </div>
 </body>
 </html>

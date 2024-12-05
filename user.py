@@ -14,7 +14,17 @@ user_bp = Blueprint('user', __name__)  # Define the blueprint for user routes
 @user_bp.route('/')
 def index():
     return render_template('index.html')  # 確保該模板存在並且路徑正確 # Home page with 4 buttons: Register, Login, Loans, Credit Card
+@user_bp.route('/account')
+def account():
+    return render_template('account.html')
 
+@user_bp.route('/aboutbank')
+def aboutbank():
+    return render_template('aboutbank.html')
+
+@user_bp.route('/otherservice')
+def otherservice():
+    return render_template('otherservice.html')
 # Register Account
 @user_bp.route('/register_account', methods=['GET', 'POST'])
 def register_account():
@@ -339,7 +349,7 @@ def get_loans_for_customer(customer_id):
         query = """
         SELECT LoanID, LoanType, PrincipalAmount, InterestRate, StartDate, Duration
         FROM LOAN
-        WHERE CustomerID = %s
+        WHERE CustomerID = %s and Status= 'A'
         """
         cur.execute(query, (customer_id,))
 
@@ -432,21 +442,45 @@ def loan_payment():
                     cur.execute("""
                         INSERT INTO LOANPAYMENT (PaymentID, LoanID, PaymentDate, Amount, Status, InterestPaid, PrinciplePaid)
                         VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    """, (payment_id, loan_id, payment_date, payment_amount, 'C', interest_paid, principal_paid))
+                    """, (payment_id, loan_id, payment_date, payment_amount, 'W', interest_paid, principal_paid))
 
                     # Update the principal amount in the LOAN table
                     cur.execute("""
-                        UPDATE LOAN
-                        SET PrincipalAmount = PrincipalAmount - %s
+                        SELECT PrincipalAmount
+                        FROM LOAN
                         WHERE LoanID = %s
-                    """, (principal_paid, loan_id))
+                        FOR UPDATE
+                    """, (loan_id,))
 
+                    # Fetch the current principal amount
+                    result = cur.fetchone()
+                    if result is None:
+                        raise ValueError("LoanID not found.")
+
+                    current_principal = result[0]
+
+                    # Check if the payment exceeds the remaining principal
+                    print(f"Current Principal: {current_principal}")
+                    print(f"Principal Paid: {principal_paid}")
+            
+                    if current_principal <= principal_paid:
+                        cur.execute("""
+                            UPDATE LOAN
+                            SET PrincipalAmount = 0, Status = 'C'
+                            WHERE LoanID = %s
+                        """, (loan_id,))
+                 
+                    else:
+                        cur.execute("""
+                            UPDATE LOAN
+                            SET PrincipalAmount = PrincipalAmount - %s
+                            WHERE LoanID = %s
+                        """, (principal_paid, loan_id))
+                   
                     conn.commit()
-                    session.pop('selected_loan', None)  # Remove CustomerID from session
+                    
 
-
-            return redirect(url_for('user.search_loan'))
-
+                return redirect(url_for('user.search_loan'))
         except ValueError:
             print("Invalid payment amount.")
             return jsonify({"message": "Invalid payment amount"}), 400
@@ -462,79 +496,4 @@ def loan_payment():
 def customer_logout():
     session.pop('CustomerID', None)  # Remove CustomerID from session
     return redirect(url_for('user.customer_login')) 
-
-
-
-
-#----------------------------------------------------------------------------
-
-
-@user_bp.route('/credit_card', methods=['GET', 'POST'])
-def credit_card():
-    if request.method == 'POST':
-        # Extract data from form
-        data = {
-            'CardID': request.form.get('CardID'),
-            'CustomerID': request.form.get('CustomerID'),
-            'BranchID': request.form.get('BranchID'),
-            'IssueDate': request.form.get('IssueDate'),
-            'ExpiryDate': request.form.get('ExpiryDate'),
-            'InterestRate': request.form.get('InterestRate'),
-            'Limit': request.form.get('Limit'),
-            'Status': request.form.get('Status'),
-            'Type': request.form.get('Type'),
-            'CVN': request.form.get('CVN'),
-            'Number': request.form.get('Number')
-        }
-
-        # Validate required fields
-        required_fields = ['CardID', 'CustomerID', 'BranchID', 'IssueDate', 'ExpiryDate', 
-                            'InterestRate', 'Limit', 'Status', 'Type', 'CVN', 'Number']
-        if not all(data[field] for field in required_fields):
-            return jsonify({"error": "Missing required fields"}), 400
-
-        # Validate date format for IssueDate and ExpiryDate
-        try:
-            datetime.strptime(data['IssueDate'], '%Y-%m-%d')
-            datetime.strptime(data['ExpiryDate'], '%Y-%m-%d')
-        except ValueError:
-            return jsonify({"error": "Invalid date format. Use YYYY-MM-DD"}), 400
-
-        # Validate InterestRate and Limit are integers
-        try:
-            int(data['InterestRate'])
-            int(data['Limit'])
-        except ValueError:
-            return jsonify({"error": "InterestRate and Limit must be integers"}), 400
-
-        # Insert into CREDIT_CARD table
-        try:
-            conn = get_db_connection()
-            cur = conn.cursor()
-
-            cur.execute("""
-                INSERT INTO CREDITCARD (CardID, CustomerID, BranchID, IssueDate, ExpiryDate, 
-                                         InterestRate, Limit, Status, Type, CVN, Number)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (
-                data['CardID'], data['CustomerID'], data['BranchID'], data['IssueDate'], 
-                data['ExpiryDate'], data['InterestRate'], data['Limit'], data['Status'],
-                data['Type'], data['CVN'], data['Number']
-            ))
-
-            conn.commit()
-        except Exception as e:
-            conn.rollback()
-            return jsonify({"error": str(e)}), 500
-        finally:
-            cur.close()
-            conn.close()
-
-        return redirect(url_for('user.index'))  
-
-    return render_template('credit_card.html')  
-
-# --------------------------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------------------------------
 

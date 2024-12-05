@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Transaction History</h2>
+
+        <!-- Search Form -->
+        <form method="POST" class="mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <label for="DateFrom">Date From:</label>
+                    <input type="date" id="DateFrom" name="DateFrom" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="DateTo">Date To:</label>
+                    <input type="date" id="DateTo" name="DateTo" class="form-control">
+                </div>
+            
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Search</button>
+        </form>
+
+        <!-- Transactions Table -->
+        <table class="table table-striped" border="1">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Card ID</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                    <th>Merchant Name</th>
+                    <th>Transaction Company</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if transactions %}
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction[0] }}</td>  <!-- TransactionID -->
+                            <td>{{ transaction[1] }}</td>  <!-- CreditCardID -->
+                            <td>{{ transaction[2].strftime('%Y-%m-%d') }}</td>  <!-- Date -->
+                            <td>{{ transaction[3] }}</td>  <!-- Amount -->
+                            <td>{{ transaction[4] }}</td>  <!-- Location -->
+                            <td>{{ transaction[5] }}</td>  <!-- Description -->
+                            <td>{{ transaction[6] }}</td>  <!-- MerchantName -->
+                            <td>{{ transaction[7] }}</td>  <!-- TransactionCompany -->
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">No transactions found</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+            
+        </table>
+    </div>
+    <!-- Add this in your cdashboard.html where you want the logout option to appear -->
+<!-- Logout Button - positioned above Back to User Index -->
+<div class="mt-4">
+    <a href="{{ url_for('card.clogout') }}" class="btn btn-danger btn-block">Logout</a>
+</div>
+
+<div class="mt-2">
+    <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
+</div>
+
+    
+</body>
+</html>

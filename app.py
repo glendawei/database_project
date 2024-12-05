@@ -2,6 +2,7 @@ from flask import Flask, Blueprint, request, render_template, redirect, url_for,
 from user import user_bp  # Import the user blueprint
 from admin import admin_bp  # Import the admin blueprint
 from bank import bank_bp 
+from card import card_bp
 from datetime import timedelta
 
 app = Flask(__name__)
@@ -9,6 +10,8 @@ app = Flask(__name__)
 app.register_blueprint(user_bp, url_prefix='/user')  # 使用 '/user' 前綴註冊 user 藍圖
 app.register_blueprint(admin_bp, url_prefix='/admin')  # Routes in admin will be prefixed with '/admin'
 app.register_blueprint(bank_bp, url_prefix='/bank')  # 使用 '/user' 前綴註冊 user 藍圖
+app.register_blueprint(card_bp, url_prefix='/card')  # 使用 '/user' 前綴註冊 user 藍圖
+
 
 # Set the secret key and session configurations
 app.secret_key = 'your_secret_key'  # Secret key for signing cookies
