@@ -8,25 +8,25 @@
 <body>
     <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
 
-    <h1>Approve Loan Requests</h1>
+    <h1>Approve Credit Card Requests</h1>
     <table>
         <tr>
-            <th>Loan ID</th>
-            <th>Loan Type</th>
-            <th>Principal Amount</th>
-            <th>Duration</th>
+            <th>Card ID</th>
+            <th>Card Limit</th>
+            <th>Type</th>
+            <th>Branch</th>
             <th>Customer ID</th>
             <th>Approve</th>
         </tr>
-        {% for loan in loan_requests %}
+        {% for card in card_requests %}
         <tr>
-            <td>{{ loan[0] }}</td>
-            <td>{{ loan[1] }}</td>
-            <td>{{ loan[2] }}</td>
-            <td>{{ loan[3] }}</td>
-            <td>{{ loan[4] }}</td>
+            <td>{{ card[0] }}</td>
+            <td>{{ card[6] }}</td>
+            <td>{{ card[8] }}</td>
+            <td>{{ card[16] }}</td>
+            <td>{{ card[1] }}</td>
             <td>
-                <form action="/admin/approve_loan/{{ loan[0] }}" method="post">
+                <form action="/admin/approve_credit_card/{{ card[0] }}" method="post">
                     <button type="submit">Approve</button>
                 </form>
             </td>
@@ -40,10 +40,10 @@
 </body>
 </html>
 <style>
-    th,
-    td {
-      border: 1px solid black;
-      width: 150px;
-      overflow: hidden;
-    }
+th,
+td {
+  border: 1px solid black;
+  width: 150px;
+  overflow: hidden;
+}
 </style>

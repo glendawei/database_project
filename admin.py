@@ -357,6 +357,41 @@ def approve_single_loan(loan_id):
 
     return redirect(url_for('admin.approve_loan'))
 
+# View all loan requests
+@admin_bp.route('/approve_credit_card', methods=['GET'])
+def approve_card():
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s', ('W',))
+        card_requests = cursor.fetchall()
+        conn.close()
+        return render_template('approve_credit_card.html', card_requests=card_requests)
+    else:
+        return "Database connection error", 500
+
+# Approve loan request
+@admin_bp.route('/approve_card/<card_id>', methods=['POST'])
+def approve_single_card(card_id):
+    """Approve a single card."""
+    conn = get_db_connection()
+    if not conn:
+        return "Database connection error", 500
+
+    cursor = conn.cursor()
+
+    try:
+        # Update loan status to 'A' (Approved)
+        cursor.execute('UPDATE Creditcard SET status = %s WHERE cardid = %s', ('A', card_id))
+        conn.commit()
+        flash(f"Card {card_id} approved successfully!", "success")
+
+    finally:
+        conn.close()
+
+    return redirect(url_for('admin.approve_card'))
+
+
 # View all transactions
 @admin_bp.route('/view_all_transactions')
 def view_all_transactions():
