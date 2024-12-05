@@ -19,13 +19,13 @@
         <label for="day">Day:</label>
         <select id="day" name="day">
             <option value="" disabled selected>Select a day</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-            <option value="Sunday">Sunday</option>
+            <option value="Mon">Monday</option>
+            <option value="Tue">Tuesday</option>
+            <option value="Wed">Wednesday</option>
+            <option value="Thu">Thursday</option>
+            <option value="Fri">Friday</option>
+            <option value="Sat">Saturday</option>
+            <option value="Sun">Sunday</option>
         </select>
 
         <button type="submit">Search</button>
@@ -38,9 +38,11 @@
     <table border="1">
         <thead>
             <tr>
+                <th>Bank Name</th>
                 <th>Branch ID</th>
                 <th>Location</th>
                 <th>Phone Number</th>
+                <th>Day</th>
                 <th>Start Time</th>
                 <th>End Time</th>
             </tr>
@@ -48,19 +50,21 @@
         <tbody>
             {% for row in results %}
             <tr>
-                <td>{{ row[0] }}</td>  <!-- Branch ID -->
-                <td>{{ row[1] }}</td>  <!-- Location -->
-                <td>{{ row[2] }}</td>  <!-- Phone Number -->
-                <td>{{ row[3] }}</td>  <!-- Start Time -->
-                <td>{{ row[4] }}</td>  <!-- End Time -->
+                <td>{{ row[0] }}</td>  <!-- Bank Name -->
+                <td>{{ row[1] }}</td>  <!-- Bank ID -->
+                <td>{{ row[2] }}</td>  <!-- Branch ID -->
+                <td>{{ row[3] }}</td>  <!-- Location -->
+                <td>{{ row[4] }}</td>  <!-- Phone Number -->
+                <td>{{ row[5] }}</td>  <!-- Day -->
+                <td>{{ row[6] }}</td>  <!-- Start Time -->
+                <td>{{ row[7] }}</td>  <!-- End Time -->
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    {% else %}
+{% else %}
     <p>No results found.</p>
-    {% endif %}
-
+{% endif %}
     <hr>
 
     <!-- Button to go back to user.index -->

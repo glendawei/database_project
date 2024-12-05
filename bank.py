@@ -24,10 +24,19 @@ def branch_search():
 
         # Build dynamic WHERE clause based on which fields are provided
         query = """
-            SELECT br.branchid, br.location, br.phonenumber, oh.starttime, oh.endtime
-            FROM branch AS br
-            LEFT JOIN openinghour AS oh ON oh.branchid = br.branchid
-            WHERE 1=1
+            SELECT bk.bankername, 
+                    br.bankerid, 
+                    br.branchid, 
+                    br.location, 
+                    br.phonenumber, 
+                    oh.day, 
+                    oh.starttime, 
+                    oh.endtime
+                FROM branch AS br 
+                LEFT JOIN banker AS bk ON bk.bankerid = br.bankerid   -- Correct the join here
+                LEFT JOIN openinghour AS oh ON oh.branchid = br.branchid
+                WHERE 1=1
+
         """
         params = []
 

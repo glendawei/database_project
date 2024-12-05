@@ -35,15 +35,47 @@ def create_indexes():
     """
     conn = get_db_connection()
     cur = conn.cursor()
+    
     try:
-        cur.execute("CREATE INDEX IF NOT EXISTS idx_branch_bankerid ON branch (bankerid);")
-        cur.execute("CREATE INDEX IF NOT EXISTS idx_branch_branchid ON branch (branchid);")
-        cur.execute("CREATE INDEX IF NOT EXISTS idx_openinghour_branchid_day ON openinghour (branchid, day);")
+        # Create index on bankerid in the branch table, if it doesn't already exist
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_branch_bankerid 
+            ON branch(bankerid);
+        """)
+
+        # Create index on branchid in the branch table, if it doesn't already exist
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_branch_branchid 
+            ON branch(branchid);
+        """)
+
+        # Create index on day in the openinghour table, if it doesn't already exist
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_openinghour_day 
+            ON openinghour(day);
+        """)
+
+        # Optional: Create composite index on bankerid and branchid in the branch table, if it doesn't already exist
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_branch_bankerid_branchid 
+            ON branch(bankerid, branchid);
+        """)
+
+        # Optional: Create composite index on branchid and day in the openinghour table, if it doesn't already exist
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_openinghour_branchid_day 
+            ON openinghour(branchid, day);
+        """)
+   
+
+        # Commit the changes to the database
         conn.commit()
-        print("Indexes created successfully.")
+        print("indexes have been sucessfully created")
+    
     except Exception as e:
         conn.rollback()
         print(f"An error occurred while creating indexes: {e}")
+    
     finally:
         cur.close()
         conn.close()
