@@ -86,6 +86,7 @@ The following PostgreSQL indices are created for optimization:
 The system employs a combination of application-level and database-level locking to ensure data consistency and integrity during concurrent operations. Application-level locking is implemented using a mutual exclusion mechanism (import_lock) to prevent multiple users from initiating overlapping data import processes. This ensures that only one bulk import operation can run at any given time, mitigating the risk of data corruption or race conditions.
 On the database side, SQL LOCK TABLE statements are used to secure exclusive access to critical tables like customer and account during bulk operations. This prevents other transactions from reading or modifying these tables while data import or update processes are in progress. By acquiring these locks, the system ensures that data remains consistent even in high-concurrency environments. To minimize the potential impact on system performance, locks are released promptly after the operation concludes. These locking strategies collectively provide robust safeguards against data conflicts and maintain the integrity of operations in a multi-user environment.
 
+## DEMO Video
 [![Watch the video](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
 
 
