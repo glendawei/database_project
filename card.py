@@ -313,8 +313,8 @@ def repayment():
 
     if request.method == 'POST':
         bill_month = request.form.get('bill_month')
-        payment_amount = request.form.get('payment_amount', type=float)
-        payment_amount = Decimal(payment_amount)
+        payment_amount = request.form.get('payment_amount',type = int)
+
         m = request.form.get('method')
 
         if not bill_month or payment_amount is None:

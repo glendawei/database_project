@@ -9,7 +9,6 @@
     <h1>Repayment Page</h1>
     <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
 
-
     <h2>Unpaid Bills</h2>
     {% if bills %}
         <table border="1">
@@ -40,9 +39,9 @@
     {% if bills %}
         <form method="POST" action="{{ url_for('card.repayment') }}">
             <label for="bill_month">Select Bill Month:</label>
-            <select id="bill_month" name="bill_month" required>
+            <select id="bill_month" name="bill_month" required onchange="updateMaxAmount()">
                 {% for bill in bills %}
-                <option value="{{ bill[0] }}">{{ bill[0] }}</option>
+                <option value="{{ bill[0] }}" data-max="{{ bill[3] }}">{{ bill[0] }}</option>
                 {% endfor %}
             </select><br>
 
@@ -66,8 +65,18 @@
         <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
     </div>
     <div class="mt-2">
-        <a href="{{ url_for('card.cdashboard') }}" class="btn btn-secondary btn-block">card services</a>
+        <a href="{{ url_for('card.cdashboard') }}" class="btn btn-secondary btn-block">Card Services</a>
     </div>
-    
+
+    <script>
+        function updateMaxAmount() {
+            const billMonthSelect = document.getElementById('bill_month');
+            const selectedOption = billMonthSelect.options[billMonthSelect.selectedIndex];
+            const maxAmount = selectedOption.getAttribute('data-max');
+            const amountInput = document.getElementById('amount');
+            amountInput.max = maxAmount;
+            amountInput.title = `Amount should be less than or equal to ${maxAmount}.`;
+        }
+    </script>
 </body>
 </html>
