@@ -212,7 +212,7 @@ def ctransactions():
         except Exception as e:
             print(f"Database error: {e}")
             return "Database error, please try again later."
-        print(f"Transactions: {transactions}")
+     
 
 
     return render_template('ctransactions.html', transactions=transactions)
@@ -270,7 +270,7 @@ def generate_monthly_bills():
             SET lastupdate = %s
             WHERE cardid = %s
        
-        """, (last_day_of_last_month, session['card_id']))
+        """, (first_day_of_this_month, session['card_id']))
 
         conn.commit()
         cur.close()
