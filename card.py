@@ -1,7 +1,7 @@
 import datetime  # 主匯入 datetime 模組
 from flask import Blueprint, request, render_template, redirect, url_for, jsonify, session
 from db import get_db_connection
-
+from faker import Faker
 import random
 from datetime import datetime, timedelta
 
@@ -9,50 +9,12 @@ card_bp = Blueprint('card', __name__)  # Define the blueprint for user routes
 
 
 import random
-import random
+fake = Faker()
 
-def generate_card_id(customer_id):
-    retries = 0
-    cardNum = 14
-    ranNum = 10
-    round = 1
-    maxround = 5
-
-    while round < maxround:
-        conn = get_db_connection()
-        cur = conn.cursor()
-
-        # Base card id is the first `cardNum` digits of the customer_id
-        base_card_id = customer_id[:cardNum]
+def generate_card_id():
+    id = fake.bothify(text ='????###########')
+    return id[:15]
         
-        # Calculate the number of random digits to append based on the current round
-        suffix_length = round  # Number of random digits increases with each round
-        max_retries = ranNum**suffix_length
-        
-        # Generate a random suffix with enough digits to fill the required length
-        suffix = str(random.randint(0, max_retries-1)).zfill(suffix_length)
-        
-        # Combine the base and suffix to form the final card ID
-        card_id = base_card_id + suffix
-        
-        # Check if the card_id exists in the database
-        cur.execute("SELECT EXISTS(SELECT 1 FROM CREDITCARD WHERE CardID = %s  )", (card_id,))
-        exists = cur.fetchone()[0]
-        cur.close()
-        
-        # If the CardID does not exist, return it
-        if not exists:
-            return card_id
-        
-        # Retry logic
-        retries += 1
-        if retries >= max_retries:
-            cardNum -= 1  # Reduce the base card number length if retries exceed max
-            retries = 0
-            round += 1
-    
-    # If no unique CardID is found within the retry limit, raise an exception
-    raise Exception("Failed to generate a unique CardID after {} retries.".format(max_retries))
 # Luhn algorithm to validate credit card number
 def luhn_algorithm(card_number):
     total = 0
@@ -133,7 +95,7 @@ def credit_card():
         data['Number'] = generate_credit_card_number(card_type) 
 
         # Generate CardID using the CustomerID
-        data['CardID'] = generate_card_id(data['CustomerID'])
+        data['CardID'] = generate_card_id()
 
  
 
@@ -319,27 +281,10 @@ def generate_monthly_bills():
     except Exception as e:
         print(f"Error generating monthly bills: {e}")
 
-# Repayment view route
-import string
+
 def generate_unique_payment_id():
-    """
-    生成唯一的 PaymentID，格式為 'YYYYMMDDHHMMSSXXX'，其中 XXX 是隨機字母或數字。
-    長度最多為 15 字元。
-    """
-    while True:
-        # 使用當前時間戳，格式為 YYYYMMDDHHMMSS
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-
-        # 添加 3 個隨機字母或數字，確保唯一性
-        random_suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
-
-        # 拼接結果
-        payment_id = f"{timestamp}{random_suffix}"
-
-        # 確保長度為 15 字元
-        payment_id = payment_id[:15]
-
-        return payment_id
+  id = fake.bothify(text ='???????#######')
+  return id
 
 
 from decimal import Decimal
