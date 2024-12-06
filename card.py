@@ -122,7 +122,7 @@ def credit_card():
             'ExpiryDate': expiry_date.strftime('%Y-%m-%d'),  # Set ExpiryDate to 7 years after IssueDate
             'InterestRate': 0.1,
             'Limit': 50000,
-            'Status': 'A',
+            'Status': 'W',
             'Type': request.form.get('Type'),
             'CVN': str(random.randint(100, 999)).zfill(3),  # Ensure CVN is 3 digits
             'lastupdate': issue_date.strftime('%Y-%m-%d'), 
