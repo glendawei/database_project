@@ -6,10 +6,17 @@
     <title>Account Balance</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    <a href="{{ url_for('user.afterlogin') }}"style="position: fixed; right: 190px; top: 10px; display: inline-block;"><button>Back</button></a>
 
     <h1>Your Account Balance</h1>
     <p>Balance: {{ balance }}</p>
-    <a href="{{ url_for('user.afterlogin') }}">Back</a>
+
+
 </body>
 </html>

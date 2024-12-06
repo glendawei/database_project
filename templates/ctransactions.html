@@ -7,8 +7,15 @@
     
 </head>
 <body>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    <a href="{{ url_for('card.cdashboard') }}" style="position: fixed; right: 190px; top: 10px; display: inline-block;"><button>Card Dashboard</button></a>
     <div class="container mt-5">
-        <h2>Transaction History</h2>
+        <h1>Credit Card Transaction History</h1>
 
         <!-- Search Form -->
         <form method="POST" class="mb-4">
@@ -24,20 +31,20 @@
             
             </div>
             <button type="submit" class="btn btn-primary mt-3">Search</button>
+      
         </form>
 
         <!-- Transactions Table -->
         <table class="table table-striped" border="1">
             <thead>
                 <tr>
-                    <th>Transaction ID</th>
-                    <th>Card ID</th>
-                    <th>Date</th>
-                    <th>Amount</th>
-                    <th>Location</th>
-                    <th>Description</th>
-                    <th>Merchant Name</th>
-                    <th>Transaction Company</th>
+                    <th>Transaction ID:</th>
+                    <th>Card ID:</th>
+                    <th>Date:</th>
+                    <th>Amount:</th>
+                    <th>Description:</th>
+                    <th>Merchant Name:</th>
+                    <th>Transaction Company:</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,7 +58,7 @@
                             <td>{{ transaction[4] }}</td>  <!-- Location -->
                             <td>{{ transaction[5] }}</td>  <!-- Description -->
                             <td>{{ transaction[6] }}</td>  <!-- MerchantName -->
-                            <td>{{ transaction[7] }}</td>  <!-- TransactionCompany -->
+                         
                         </tr>
                     {% endfor %}
                 {% else %}
@@ -65,16 +72,14 @@
     </div>
     <!-- Add this in your cdashboard.html where you want the logout option to appear -->
 <!-- Logout Button - positioned above Back to User Index -->
-<div class="mt-4">
-    <a href="{{ url_for('card.clogout') }}" class="btn btn-danger btn-block">Logout</a>
+<div>
+      
+            
+    <a href="{{ url_for('card.clogout') }}" class="btn btn-secondary mt-3"><button>Logout</button></a>
+   
 </div>
 
-<div class="mt-2">
-    <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
-</div>
-<div class="mt-2">
-    <a href="{{ url_for('card.cdashboard') }}" class="btn btn-secondary btn-block">card services</a>
-</div>
+
     
 </body>
 </html>

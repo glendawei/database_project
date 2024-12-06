@@ -6,31 +6,34 @@
     <title>Credit Card Request</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
-
-    <h1>Credit Card Request Form</h1>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
+    <h1>Credit Card Application</h1>
     <form action="{{ url_for('card.credit_card') }}" method="POST">
     
-        <label for="CustomerID">Customer ID:</label>
-        <input type="text" id="CustomerID" name="CustomerID" required><br><br>
+        <label for="customer_id">Customer ID:</label>
+        <input type="text" id="customer_id" name="CustomerID" required><br><br>
 
-        <label for="BranchID">Branch ID:</label>
-        <input type="text" id="BranchID" name="BranchID" required><br><br>
+        <label for="branch_id">Branch ID:</label>
+        <input type="text" id="branch_id" name="BranchID" required><br><br>
 
+        <label for="card_type">Card Type:</label>
+        <select id="card_type" name="Type" required>
+            <option value="V">Visa</option>
+            <option value="M">MasterCard</option>
+            <option value="A">American Express</option>
+            <option value="D">Discover</option>
+            <option value="J">JCB</option>
+            <option value="U">UnionPay</option>
+        </select><br><br>
 
-        <label for="Type">Type:</label>
-<select id="Type" name="Type" required>
-    <option value="V">Visa</option>
-    <option value="M">MasterCard</option>
-    <option value="A">American Express</option>
-    <option value="D">Discover</option>
-    <option value="J">JCB</option>
-    <option value="U">UnionPay</option>
-</select><br><br>
-
-
-        <button type="submit">Submit Credit Card Request</button>
+        <button type="submit">Submit </button>
     </form>
+
 </body>
-<a href="{{ url_for('user.index') }}">Back to User Index</a>
 </html>

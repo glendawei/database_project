@@ -6,9 +6,14 @@
     <title>Loan Request</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
-
-    <h1>Loan Request Form</h1>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
+    <h1>Apply for Loan</h1>
     <form action="{{ url_for('user.loan') }}" method="POST">
 
         <label for="CustomerID">Customer ID:</label>
@@ -33,7 +38,7 @@
         <input type="number" id="Duration" name="Duration" required><br><br>
 
         <button type="submit">Submit Loan Request</button>
-        <a href="{{ url_for('user.index') }}">Back to User Index</a>
+
     </form>
 </body>
 

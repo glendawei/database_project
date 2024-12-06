@@ -2,12 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Loan Search for Customer</title>
+    <title>Search Customer Loans</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
 
-    <h1>Loan Search for Customer</h1>
+    <h1>Search Customer Loans</h1>
 
     {% if loans %}
     <table border="1">
@@ -53,6 +59,8 @@
     {% endif %}
 
     <!-- Logout link -->
-    <a href="{{ url_for('user.customer_logout') }}">Logout</a>
+    <a href="{{ url_for('user.customer_logout') }}">
+        <button>Logout</button>
+    </a>
 </body>
 </html>

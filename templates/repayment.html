@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Repayment</title>
+    <title>Repay Bills</title>
 </head>
 <body>
-    <h1>Repayment Page</h1>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    <a href="{{ url_for('card.cdashboard') }}"style="position: fixed; right: 190px; top: 10px; display: inline-block;"><button>Card Dashboard</button></a>
 
-    <h2>Unpaid Bills</h2>
+    
+    <h1>Repay Bills</h1>
+
+
+    <h2>Outstanding Bills</h2>
     {% if bills %}
         <table border="1">
             <thead>
@@ -32,10 +41,10 @@
             </tbody>
         </table>
     {% else %}
-        <p>No unpaid bills at the moment!</p>
+        <p>No outstanding bills at the moment!</p>
     {% endif %}
 
-    <h2>Repayment Form</h2>
+    <h2>Make a Repayment</h2>
     {% if bills %}
         <form method="POST" action="{{ url_for('card.repayment') }}">
             <label for="bill_month">Select Bill Month:</label>
@@ -56,16 +65,17 @@
                 <option value="C">Cash</option>
             </select><br>
 
-            <button type="submit">Submit Repayment</button>
+            <button type="submit">Submit Payment</button>
         </form>
     {% else %}
         <p>No bills available for repayment.</p>
     {% endif %}
-    <div class="mt-2">
-        <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
-    </div>
-    <div class="mt-2">
-        <a href="{{ url_for('card.cdashboard') }}" class="btn btn-secondary btn-block">Card Services</a>
+
+    <div>
+ 
+
+     
+
     </div>
 
     <script>

@@ -177,7 +177,7 @@ def ctransactions():
     # Check if the user is logged in
     if 'card_id' not in session:
         print("Card ID not in session!")
-        return redirect(url_for('card.login'))
+        return redirect(url_for('card.clogin'))
 
     card_id = session['card_id']
     transactions = []
@@ -283,8 +283,8 @@ def generate_monthly_bills():
 
 
 def generate_unique_payment_id():
-  id = fake.bothify(text ='???????#######')
-  return id
+    id = fake.bothify(text ='???????#######')
+    return id
 
 
 from decimal import Decimal

@@ -6,9 +6,15 @@
     <title>Branch Search</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
 
-    <h1>Branch Search</h1>
+    <h1>Bank Finder</h1>
     <form action="/bank/branch_search" method="POST">
         <label for="BankerID">Banker ID:</label>
         <input type="text" id="BankerID" name="BankerID" placeholder="Enter Banker ID">
@@ -16,7 +22,7 @@
         <label for="BranchID">Branch ID:</label>
         <input type="text" id="BranchID" name="BranchID" placeholder="Enter Branch ID">
 
-        <label for="day">Day:</label>
+        <label for="day">Select Day:</label>
         <select id="day" name="day">
             <option value="" disabled selected>Select a day</option>
             <option value="Mon">Monday</option>
@@ -63,13 +69,10 @@
             {% endfor %}
         </tbody>
     </table>
-{% else %}
+    {% else %}
     <p>No results found.</p>
-{% endif %}
+    {% endif %}
     <hr>
-
-    <!-- Button to go back to user.index -->
-    <a href="{{ url_for('user.index') }}">Back to User Index</a>
 
 </body>
 </html>

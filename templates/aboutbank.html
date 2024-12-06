@@ -3,18 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Bank</title>
+    <title>about Banks</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
-
-    <h1>About Bank</h1>
-    <div>
-        <a href="{{ url_for('bank.branch_search') }}"><button>Branch Info</button></a>
-    </div>
-    <div class="mt-2">
-        <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
-    </div>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
     
+    <h1>About Banks</h1>
+    <div class="container">
+        <a href="{{ url_for('bank.branch_search') }}"><button>Bank Finder</button></a>
+
+    </div>
 </body>
 </html>

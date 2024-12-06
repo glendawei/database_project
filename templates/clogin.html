@@ -6,7 +6,14 @@
     <title>Card Login</title>
 </head>
 <body>
-    <h2>Card Login</h2>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
+    <h1>Card Login</h1>
     <form method="POST" action="{{ url_for('card.clogin') }}">
         <label for="CardID">Card ID:</label>
         <input type="text" id="CardID" name="CardID" required>
@@ -16,6 +23,7 @@
     {% if error %}
     <p style="color: red;">{{ error }}</p>
     {% endif %}
-    <a href="{{ url_for('user.index') }}">Back to User Index</a>
+
+
 </body>
 </html>

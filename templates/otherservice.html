@@ -6,17 +6,21 @@
     <title>Other Services</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
 
-    <h1>Other Services</h1>
+    <h1>Additional Services</h1>
     <div>
-        <a href="{{ url_for('user.loan') }}"><button>Loans</button></a>
+        <a href="{{ url_for('user.loan') }}"><button>Apply for Loan</button></a>
         <a href="{{ url_for('user.customer_login') }}"><button>Search Loans</button></a>
-        <a href="{{ url_for('card.credit_card') }}"><button>Credit Card</button></a>
+        <a href="{{ url_for('card.credit_card') }}"><button>Apply for Credit Card</button></a>
         <a href="{{ url_for('card.clogin') }}"><button>Credit Card Services</button></a>
-    </div>
-    <div class="mt-2">
-        <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
+
     </div>
     
 </body>

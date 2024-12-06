@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Transaction</title>
+    <title>Perform Transaction</title>
     <style>
         .alert {
             color: red;
@@ -12,11 +12,17 @@
     </style>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;">
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
         <button>Home</button>
     </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
 
-    <h1>Add a Transaction</h1>
+    <a href="{{ url_for('user.afterlogin') }}"style="position: fixed; right: 190px; top: 10px; display: inline-block;"><button>Back</button></a>
+    
+
+    <h1>Perform a Transaction</h1>
 
     <!-- Display error message if exists -->
     {% if error %}
@@ -26,18 +32,18 @@
     {% endif %}
 
     <form method="POST">
-        <label for="Amount">Amount:</label>
+        <label for="Amount">Transaction Amount:</label>
         <input type="number" id="Amount" name="Amount" required><br><br>
 
-        <label for="TransactionAccountID">Transaction Account ID:</label>
+        <label for="TransactionAccountID">Account ID:</label>
         <input type="text" id="TransactionAccountID" name="TransactionAccountID" required><br><br>
 
-        <label for="Description">Description:</label>
+        <label for="Description">Transaction Description:</label>
         <textarea id="Description" name="Description"></textarea><br><br>
 
-        <button type="submit">Submit Transaction</button>
+        <button type="submit">Submit</button>
     </form>
 
-    <a href="{{ url_for('user.afterlogin') }}">Back</a>
+    
 </body>
 </html>

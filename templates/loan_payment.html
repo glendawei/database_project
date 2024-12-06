@@ -6,7 +6,13 @@
     <title>Loan Payment</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
 
     <h1>Loan Payment</h1>
 
@@ -17,12 +23,12 @@
         <form action="/user/loan_payment" method="POST">
             <label for="PaymentAmount">Enter Payment Amount:</label>
             <input type="number" name="PaymentAmount" id="PaymentAmount" required>
-            <button type="submit">Submit Payment</button>
+            <button type="submit">Submit</button>
         </form>
     {% else %}
         <p>No loan details found.</p>
     {% endif %}
 
-    <p><a href="{{ url_for('user.search_loan') }}">Back to Loan Results</a></p>
+    <p><a href="{{ url_for('user.search_loan') }}">Loan Results</a></p>
 </body>
 </html>

@@ -6,7 +6,13 @@
     <title>Transaction Records</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    <a href="{{ url_for('user.afterlogin') }}"style="position: fixed; right: 190px; top: 10px; display: inline-block;"><button>Back</button></a>
 
     <h1>Your Transaction Records</h1>
     <table border="1">
@@ -20,13 +26,13 @@
         {% for transaction in transactions %}
             <tr>
                 <td>{{ transaction[0] }}</td>  <!-- TransactionID -->
-                <td>{{ transaction[1] }}</td>  <!-- transactiontype -->
-                <td>{{ transaction[2] }}</td>  <!-- transactionaccount -->
+                <td>{{ transaction[1] }}</td>  <!-- Transaction Type -->
+                <td>{{ transaction[2] }}</td>  <!-- Transaction Account -->
                 <td>{{ transaction[3] }}</td>  <!-- Amount -->
                 <td>{{ transaction[4] }}</td>  <!-- Description -->
             </tr>
         {% endfor %}
     </table>
-    <a href="{{ url_for('user.afterlogin') }}">Back</a>
+
 </body>
 </html>

@@ -6,7 +6,13 @@
     <title>Register Account</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
 
     <h1>Register New Account</h1>
     <form method="POST">
@@ -33,6 +39,6 @@
 
         <button type="submit">Register</button>
     </form>
-    <a href="{{ url_for('user.index') }}">Back to User Index</a>
+
 </body>
 </html>

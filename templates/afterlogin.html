@@ -6,15 +6,20 @@
     <title>After Login</title>
 </head>
 <body>
-    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px; display: inline-block;">
+        <button>Home</button>
+    </a>
+    <a href="{{ url_for('user.index') }}" style="position: fixed; right: 70px; top: 10px; display: inline-block;">
+        <button>User Dashboard</button>
+    </a>
+    
 
     <h1>Welcome, {{ session['AccountID'] }}</h1>
     <div>
         <a href="{{ url_for('user.check_balance') }}"><button>Check Account Balance</button></a>
-        <a href="{{ url_for('user.check_transaction_record') }}"><button>Check Transaction Record</button></a>
+        <a href="{{ url_for('user.check_transaction_record') }}"><button>Check Transaction Records</button></a>
         <a href="{{ url_for('user.add_transaction') }}"><button>Perform Transaction</button></a>
-        <a href="{{ url_for('user.logout') }}"><button>Exit</button></a>
-
+        <a href="{{ url_for('user.logout') }}"><button>Log Out</button></a>
     </div>
 </body>
 </html>
