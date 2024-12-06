@@ -11,9 +11,9 @@ ALLOWED_EXTENSIONS = {'csv'}
 
 conn = get_db_connection()
 cursor = conn.cursor()
-cursor.execute("CREATE INDEX idx_account_customerid ON account (customerid);")
-cursor.execute("CREATE INDEX idx_account_dateopened ON account (dateopened);")
-cursor.execute("CREATE INDEX idx_account_balance ON account (balance);")
+cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_customerid ON account (customerid);")
+cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_dateopened ON account (dateopened);")
+cursor.execute("CREATE INDEX IF NOT EXISTS idx_account_balance ON account (balance);")
 cursor.close()
 conn.close()
 

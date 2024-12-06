@@ -1,12 +1,10 @@
-import logging
-from flask import Blueprint, request, render_template, redirect, url_for, jsonify
-
-from datetime import datetime
-import uuid
-from datetime import timedelta
-from flask import Flask, session
+import datetime  # 主匯入 datetime 模組
+from flask import Blueprint, request, render_template, redirect, url_for, jsonify, session
 from db import get_db_connection
+
 import random
+from datetime import datetime, timedelta
+
 card_bp = Blueprint('card', __name__)  # Define the blueprint for user routes
 
 
@@ -124,9 +122,10 @@ def credit_card():
             'ExpiryDate': expiry_date.strftime('%Y-%m-%d'),  # Set ExpiryDate to 7 years after IssueDate
             'InterestRate': 0.1,
             'Limit': 50000,
-            'Status': 'W',
+            'Status': 'A',
             'Type': request.form.get('Type'),
             'CVN': str(random.randint(100, 999)).zfill(3),  # Ensure CVN is 3 digits
+            'lastupdate': issue_date.strftime('%Y-%m-%d'), 
            
         }
         card_type=  data['Type']
@@ -152,13 +151,14 @@ def credit_card():
 
             cur.execute("""
                 INSERT INTO CREDITCARD (CardID, CustomerID, BranchID, IssueDate, ExpiryDate, 
-                                         InterestRate, CardLimit, Status, Type, CVN, Number)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                                        InterestRate, CardLimit, Status, Type, CVN, Number, lastupdate)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 data['CardID'], data['CustomerID'], data['BranchID'], data['IssueDate'], 
                 data['ExpiryDate'], data['InterestRate'], data['Limit'], data['Status'],
-                data['Type'], data['CVN'], data['Number']
+                data['Type'], data['CVN'], data['Number'], data['lastupdate']
             ))
+
 
             conn.commit()
         except Exception as e:
@@ -254,6 +254,183 @@ def ctransactions():
 
 
     return render_template('ctransactions.html', transactions=transactions)
+
+# Function to generate monthly bills
+def generate_monthly_bills():
+    print("MMMMMM")
+    today = datetime.today()
+    first_day_of_this_month = today.replace(day=1)
+    last_day_of_last_month = first_day_of_this_month - timedelta(days=1)
+    
+    try:
+        # Fetch last update from creditcard table
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT lastupdate FROM creditcard WHERE cardid = %s", (session['card_id'],))
+        lastupdate = cur.fetchone()[0]
+    
+
+        print(f"Last update: {lastupdate}")
+        print(f"Last day of last month: {last_day_of_last_month}")
+
+        # Query to calculate total transaction amounts for each credit card in the last month
+        cur.execute("""
+            SELECT CreditCardID, 
+                TO_CHAR(Date, 'YYYY-MM') AS Month, 
+                SUM(Amount) 
+            FROM CREDITCARDTRANSACTION
+            WHERE Date BETWEEN %s AND %s
+            GROUP BY CreditCardID, Month
+            ORDER BY Month;
+
+        """, (lastupdate, last_day_of_last_month))
+        print("moooooo")
+        
+        transactions = cur.fetchall()
+
+        # Insert or update the monthly bills
+        for transaction in transactions:
+            card_id, bill_month, total_amount = transaction
+
+            # Insert or update monthlybill table
+            cur.execute("""
+                INSERT INTO monthlybill (CreditCardID, BillMonth, TotalAmount, PaidAmount)
+                VALUES (%s, %s, %s, 0.00)  -- Set initial PaidAmount to 0
+                ON CONFLICT (CreditCardID, BillMonth)  -- Specify the conflict target (the columns that make the row unique)
+                DO UPDATE SET 
+                    TotalAmount = EXCLUDED.TotalAmount,  -- Update the TotalAmount with the new value
+                    PaidAmount = EXCLUDED.PaidAmount;  -- Ensure PaidAmount is updated correctly (if needed)
+            """, (card_id, bill_month, total_amount))
+
+        # Update the last update date for the card
+        cur.execute("""
+            UPDATE creditcard
+            SET lastupdate = %s
+            WHERE cardid = %s
+       
+        """, (last_day_of_last_month, session['card_id']))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("oooo")
+
+
+    except Exception as e:
+        print(f"Error generating monthly bills: {e}")
+
+# Repayment view route
+import string
+def generate_unique_payment_id():
+    """
+    生成唯一的 PaymentID，格式為 'YYYYMMDDHHMMSSXXX'，其中 XXX 是隨機字母或數字。
+    長度最多為 15 字元。
+    """
+    while True:
+        # 使用當前時間戳，格式為 YYYYMMDDHHMMSS
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+
+        # 添加 3 個隨機字母或數字，確保唯一性
+        random_suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=3))
+
+        # 拼接結果
+        payment_id = f"{timestamp}{random_suffix}"
+
+        # 確保長度為 15 字元
+        payment_id = payment_id[:15]
+
+        return payment_id
+
+
+from decimal import Decimal
+
+@card_bp.route('/repayment', methods=['GET', 'POST'])
+def repayment():
+    if 'card_id' not in session:
+        print("請先登入以進行還款操作。", "warning")
+        return redirect(url_for('card.login'))
+
+    card_id = session['card_id']
+    conn = get_db_connection()
+
+    with conn.cursor() as cur:
+        # 生成月帳單
+        generate_monthly_bills()
+        
+        # 查詢所有未付清的帳單
+        cur.execute("""
+            SELECT BillMonth, totalAmount, paidAmount, totalAmount - paidAmount AS remainingAmount
+            FROM MONTHLYBILL 
+            WHERE CreditCardID = %s AND totalAmount - paidAmount > 0
+            ORDER BY BillMonth ASC
+        """, (card_id,))
+        bills = cur.fetchall()
+
+    if request.method == 'POST':
+        bill_month = request.form.get('bill_month')
+        payment_amount = request.form.get('payment_amount', type=float)
+        payment_amount = Decimal(payment_amount)
+        m = request.form.get('method')
+
+        if not bill_month or payment_amount is None:
+            print("請提供帳單月份和還款金額。", "danger")
+            return render_template('repayment.html', bills=bills)
+
+        try:
+            with conn.cursor() as cur:
+                # 檢查指定月份帳單是否存在
+                cur.execute("""
+                    SELECT totalAmount, paidAmount
+                    FROM MONTHLYBILL
+                    WHERE CreditCardID = %s AND BillMonth = %s
+                """, (card_id, bill_month))
+                bill = cur.fetchone()
+
+                if not bill:
+                    print("找不到指定月份的帳單。", "danger")
+                else:
+                    total_amount, paid_amount = bill
+                    remaining_amount = total_amount - paid_amount
+
+                    if payment_amount > remaining_amount:
+                        print(f"還款金額超過剩餘金額 (剩餘: {remaining_amount})。", "danger")
+                    else:
+                        # 更新帳單還款金額
+                        cur.execute("""
+                            UPDATE MONTHLYBILL
+                            SET paidAmount = paidAmount + %s
+                            WHERE CreditCardID = %s AND BillMonth = %s
+                        """, (payment_amount, card_id, bill_month))
+
+                        paymentid =generate_unique_payment_id()
+
+                        # 紀錄還款操作
+                        date = datetime.now().strftime('%Y-%m-%d')
+                        cur.execute("""
+                            INSERT INTO CREDITCARDPAYMENT (PaymentID, CreditCardID, Date, Amount, Status, Method, RemainingBalance)
+                            VALUES (%s, %s, %s, %s, 'A', %s, %s)
+                        """, (paymentid, card_id, date, payment_amount, m,remaining_amount - payment_amount))
+
+
+                        conn.commit()
+                        print("還款成功！", "success")
+        except Exception as e:
+            conn.rollback()
+            print(f"發生錯誤：{str(e)}", "danger")
+
+        # 重新載入未付清帳單
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT BillMonth, totalAmount, paidAmount, totalAmount - paidAmount AS remainingAmount
+                FROM MONTHLYBILL 
+                WHERE CreditCardID = %s AND totalAmount - paidAmount > 0
+                ORDER BY BillMonth ASC
+            """, (card_id,))
+            bills = cur.fetchall()
+
+    return render_template('repayment.html', bills=bills)
+
+
 
 @card_bp.route('/clogout', methods=['GET'])
 def clogout():

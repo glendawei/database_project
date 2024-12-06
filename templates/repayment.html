@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repayment</title>
+</head>
+<body>
+    <h1>Repayment Page</h1>
+    <a href="{{ url_for('home') }}" style="position: fixed; right: 10px; top: 10px;"><button>Home</button></a>
+
+
+    <h2>Unpaid Bills</h2>
+    {% if bills %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Bill Month</th>
+                    <th>Total Amount</th>
+                    <th>Amount Paid</th>
+                    <th>Remaining Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bills %}
+                <tr>
+                    <td>{{ bill[0] }}</td>
+                    <td>{{ bill[1] }}</td>
+                    <td>{{ bill[2] }}</td>
+                    <td>{{ bill[3] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No unpaid bills at the moment!</p>
+    {% endif %}
+
+    <h2>Repayment Form</h2>
+    {% if bills %}
+        <form method="POST" action="{{ url_for('card.repayment') }}">
+            <label for="bill_month">Select Bill Month:</label>
+            <select id="bill_month" name="bill_month" required>
+                {% for bill in bills %}
+                <option value="{{ bill[0] }}">{{ bill[0] }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="amount">Repayment Amount:</label>
+            <input type="number" id="amount" name="payment_amount" required min="1" 
+                max="{{ bills[0][3] }}" title="Amount should be less than or equal to the remaining balance."><br>
+
+            <label for="method">Repayment Method:</label>
+            <select id="method" name="method">
+                <option value="B">Bank Transfer</option>
+                <option value="V">Credit Card</option>
+                <option value="C">Cash</option>
+            </select><br>
+
+            <button type="submit">Submit Repayment</button>
+        </form>
+    {% else %}
+        <p>No bills available for repayment.</p>
+    {% endif %}
+    <div class="mt-2">
+        <a href="{{ url_for('user.index') }}" class="btn btn-secondary btn-block">Back to User Index</a>
+    </div>
+    <div class="mt-2">
+        <a href="{{ url_for('card.cdashboard') }}" class="btn btn-secondary btn-block">card services</a>
+    </div>
+    
+</body>
+</html>
