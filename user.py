@@ -469,6 +469,7 @@ def loan_payment():
                             SET PrincipalAmount = 0, Status = 'C'
                             WHERE LoanID = %s
                         """, (loan_id,))
+                        amount =0
                  
                     else:
                         cur.execute("""
@@ -476,11 +477,13 @@ def loan_payment():
                             SET PrincipalAmount = PrincipalAmount - %s
                             WHERE LoanID = %s
                         """, (principal_paid, loan_id))
+                        amount = current_principal - int(principal_paid)
+
                    
                     conn.commit()
-                    
+                    return render_template('loan_payment.html', loan=(loan_id, amount, interest_rate))    
 
-                return redirect(url_for('user.search_loan'))
+               # return redirect(url_for('user.search_loan'))
         except ValueError:
             print("Invalid payment amount.")
             return jsonify({"message": "Invalid payment amount"}), 400
