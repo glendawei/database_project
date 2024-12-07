@@ -269,19 +269,18 @@ def loan():
         data = {
             'LoanType': request.form.get('LoanType'),
             'PrincipalAmount': request.form.get('PrincipalAmount'),
-          
             'Duration': request.form.get('Duration'),
-            'CustomerID': request.form.get('CustomerID')
+            'CustomerID': request.form.get('CustomerID'),
+            'Birthday': request.form.get('Birthday')
         }
     
         data['LoanID'] = str(uuid.uuid4()).replace("-", "")[:15]  
         data['InterestRate'] = 10
         data['StartDate'] = datetime.now().strftime('%Y-%m-%d')  
-
-        data['Status']= 'W'
+        data['Status'] = 'W'
 
         required_fields = ['LoanID', 'LoanType', 'PrincipalAmount', 'Status', 'InterestRate', 
-                            'StartDate', 'Duration', 'CustomerID']
+                            'StartDate', 'Duration', 'CustomerID', 'Birthday']
         if not all(data[field] for field in required_fields):
             return jsonify({"error": "Missing required fields"}), 400
 
@@ -289,9 +288,21 @@ def loan():
             conn = get_db_connection()
             cur = conn.cursor()
 
+            # Verify if CustomerID and Birthday exist in the Customer table
+            cur.execute("""
+                SELECT COUNT(*) 
+                FROM CUSTOMER 
+                WHERE CustomerID = %s AND Birthday = %s
+            """, (data['CustomerID'], data['Birthday']))
+            
+            customer_exists = cur.fetchone()[0]
+            if customer_exists == 0:
+                return jsonify({"error": "Invalid CustomerID or Birthday"}), 400
+
+            # Insert into LOAN table
             cur.execute("""
                 INSERT INTO LOAN (LoanID, LoanType, PrincipalAmount, Status, 
-                                   InterestRate, StartDate, Duration, CustomerID)
+                                  InterestRate, StartDate, Duration, CustomerID)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """, (
                 data['LoanID'], data['LoanType'], data['PrincipalAmount'], data['Status'], 
@@ -306,9 +317,9 @@ def loan():
             cur.close()
             conn.close()
 
-        return redirect(url_for('user.index'))  
+        return redirect(url_for('user.index'))
 
-    return render_template('loan.html')  
+    return render_template('loan.html')
 
 
 @user_bp.route('/customer_login', methods=['GET', 'POST'])
@@ -316,14 +327,16 @@ def customer_login():
     if request.method == 'POST':
 
         customer_id = request.form['CustomerID']
+        bday = request.form['Birthday']
       
         if customer_id:
             conn = get_db_connection()
             cur = conn.cursor()
             cur.execute("""
-                SELECT * FROM LOAN
-                WHERE CustomerID = %s
-            """, (customer_id,))
+                SELECT * FROM Customer
+                WHERE CustomerID = %s and birthday = %s
+            """, (customer_id, bday))
+
             loans = cur.fetchall()
             print(f"Loans found: {loans}")  # Debug print
             session['CustomerID'] = customer_id

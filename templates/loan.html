@@ -18,6 +18,19 @@
 
         <label for="CustomerID">Customer ID:</label>
         <input type="text" id="CustomerID" name="CustomerID" required><br><br>
+        <label for="Birthday">Customer Birthday:</label>
+<input 
+    type="text" 
+    id="Birthday" 
+    name="Birthday" 
+    placeholder="YYYY-MM-DD" 
+    pattern="\d{4}-\d{2}-\d{2}" 
+    title="Please enter a valid date in the format YYYY-MM-DD" 
+
+    required
+>
+<small>Format: YYYY-MM-DD</small><br><br>
+        
         
         <label for="LoanType">Loan Type:</label>
         <select id="LoanType" name="LoanType" required>
