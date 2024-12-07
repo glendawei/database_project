@@ -20,7 +20,19 @@
         <input type="text" id="AccountID" name="AccountID" required><br><br>
 
         <label for="AccountType">Account Type:</label>
-        <input type="text" id="AccountType" name="AccountType" value='UK'><br><br>
+        <select id="AccountType" name="AccountType">
+          <option value="Savings">Savings</option>
+          <option value="Checking">Checking</option>
+          <option value="Current">Current</option>
+          <option value="Deposit">Certificate</option>
+          <option value="Market">Money Market</option>
+          <option value="Fixed">Fixed Deposit</option>
+          <option value="Recurring">Recurring</option>
+          <option value="Salary">Salary</option>
+          <option value="NRI">NRI</option>
+        </select>
+        <br><br>
+        
 
         <label for="BranchID">Branch ID:</label>
         <input type="text" id="BranchID" name="BranchID" required><br><br>
