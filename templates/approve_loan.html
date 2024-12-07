@@ -26,10 +26,29 @@
             <td>{{ loan[3] }}</td>
             <td>{{ loan[4] }}</td>
             <td>
-                <form action="/admin/approve_loan/{{ loan[0] }}" method="post">
+                <form action="{{ url_for('admin.approve_single_loan', loan_id=loan[0]) }}" method="post">
                     <button type="submit">Approve</button>
                 </form>
             </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h1>Approved Loan</h1>
+    <table>
+        <tr>
+            <th>Loan ID</th>
+            <th>Loan Type</th>
+            <th>Principal Amount</th>
+            <th>Duration</th>
+            <th>Customer ID</th>
+        </tr>
+        {% for loan in approved_loan %}
+        <tr>
+            <td>{{ loan[0] }}</td>
+            <td>{{ loan[1] }}</td>
+            <td>{{ loan[2] }}</td>
+            <td>{{ loan[3] }}</td>
+            <td>{{ loan[4] }}</td>
         </tr>
         {% endfor %}
     </table>

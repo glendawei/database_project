@@ -4,6 +4,12 @@ from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 from db import get_db_connection
 from threading import Lock
+from dateutil.relativedelta import relativedelta
+
+from flask import Blueprint, request, render_template, redirect, url_for, flash
+import csv
+import io
+from werkzeug.utils import secure_filename
 
 import_lock = Lock()
 admin_bp = Blueprint('admin', __name__)
@@ -224,8 +230,10 @@ def approve_loan():
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM Loan WHERE Status = %s', ('W',))
         loan_requests = cursor.fetchall()
+        cursor.execute('SELECT * FROM Loan WHERE Status = %s', ('A',))
+        approved_loan = cursor.fetchall()
         conn.close()
-        return render_template('approve_loan.html', loan_requests=loan_requests)
+        return render_template('approve_loan.html', loan_requests=loan_requests, approved_loan = approved_loan)
     else:
         return "Database connection error", 500
     
@@ -365,8 +373,10 @@ def approve_card():
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s', ('W',))
         card_requests = cursor.fetchall()
+        cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s', ('A',))
+        approved_card = cursor.fetchall()
         conn.close()
-        return render_template('approve_credit_card.html', card_requests=card_requests)
+        return render_template('approve_credit_card.html', card_requests=card_requests, approved_card=approved_card)
     else:
         return "Database connection error", 500
 
@@ -464,7 +474,10 @@ def bulk_import():
             cursor.close()
             conn.close()
 
-            return render_template('bulk_import.html', message='Import successful!')        
+            flash('Customer data imported successfully!', 'success')
+
+            # Redirect to the success page
+            return render_template('import_success.html')                    
         except Exception as e:
             # Rollback in case of error
             conn.rollback()
@@ -476,36 +489,56 @@ def bulk_import():
 
             admin_bp = Blueprint('admin_bp', __name__)
 
+
+# Your allowed file extensions
+ALLOWED_EXTENSIONS = {'csv'}
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Route for displaying the CSV import page
+# Route for success page
+@admin_bp.route('/import_success', methods=['GET'])
+def import_success():
+    return render_template('import_success.html')
+
+# Route for importing customers
 @admin_bp.route('/import_customers', methods=['GET', 'POST'])
 def import_customers():
     if request.method == 'POST':
         file = request.files['file']
-        
+
         # Check if the file exists and is allowed
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+
             # Read the CSV data
             stream = io.StringIO(file.read().decode('utf-8'), newline=None)
             csv_reader = csv.DictReader(stream)
-            
+
             # Connect to the database
             conn = get_db_connection()
             cursor = conn.cursor()
-            
-            # Insert customer data from CSV
-            for row in csv_reader:
-                cursor.execute("""
-                    INSERT INTO customer (customerid, name, phonenumber, email, gender, address, datejoined, birthday)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (customerid) DO NOTHING;
-                """, (row['customerid'], row['name'], row['phonenumber'], row['email'], row['gender'], row['address'], row['datejoined'], row['birthday']))
-            
-            conn.commit()
-            cursor.close()
-            conn.close()
+
+            try:
+                # Insert customer data from CSV
+                for row in csv_reader:
+                    cursor.execute("""
+                        INSERT INTO customer (customerid, name, phonenumber, email, gender, address, datejoined, birthday)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (customerid) DO NOTHING;
+                    """, (row['customerid'], row['name'], row['phonenumber'], row['email'], row['gender'], row['address'], row['datejoined'], row['birthday']))
+                
+                conn.commit()
+                flash('Customer data imported successfully!', 'success')
+
+                # Redirect to the success page
+                return render_template('import_success.html')            
+            except Exception as e:
+                conn.rollback()
+                flash(f"Error importing data: {e}", "danger")
+            finally:
+                cursor.close()
+                conn.close()
 
     return render_template('import_customers.html')
+

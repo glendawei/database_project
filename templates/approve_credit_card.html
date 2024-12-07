@@ -26,10 +26,29 @@
             <td>{{ card[16] }}</td>
             <td>{{ card[1] }}</td>
             <td>
-                <form action="/admin/approve_credit_card/{{ card[0] }}" method="post">
+                <form action="{{ url_for('admin.approve_single_card', card_id=card[0]) }}" method="post">
                     <button type="submit">Approve</button>
                 </form>
             </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h1>Approved Credit Card</h1>
+    <table>
+        <tr>
+            <th>Card ID</th>
+            <th>Card Limit</th>
+            <th>Type</th>
+            <th>Branch</th>
+            <th>Customer ID</th>
+        </tr>
+        {% for card in approved_card %}
+        <tr>
+            <td>{{ card[0] }}</td>
+            <td>{{ card[6] }}</td>
+            <td>{{ card[8] }}</td>
+            <td>{{ card[16] }}</td>
+            <td>{{ card[1] }}</td>
         </tr>
         {% endfor %}
     </table>
