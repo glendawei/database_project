@@ -198,7 +198,7 @@ def ctransactions():
         if date_to:
             query += " AND Date <= %s"
             params.append(date_to)
-        
+        query += " ORDER BY Date ASC"
         print(f"Query: {query}, Params: {params}")
 
         # Execute the query
