@@ -90,6 +90,8 @@ On the database side, SQL LOCK TABLE statements are used to secure exclusive acc
 
 ## DEMO Video
 [![Watch the video](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
+## 執行辦法
+`python app.py`
 
 
 
