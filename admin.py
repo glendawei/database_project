@@ -228,9 +228,9 @@ def approve_loan():
     conn = get_db_connection()
     if conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Loan WHERE Status = %s', ('W',))
+        cursor.execute('SELECT * FROM Loan WHERE Status = %s ORDER BY startdate DESC', ('W',))
         loan_requests = cursor.fetchall()
-        cursor.execute('SELECT * FROM Loan WHERE Status = %s', ('A',))
+        cursor.execute('SELECT * FROM Loan WHERE Status = %s ORDER BY startdate DESC', ('A',))
         approved_loan = cursor.fetchall()
         conn.close()
         return render_template('approve_loan.html', loan_requests=loan_requests, approved_loan = approved_loan)
@@ -371,9 +371,9 @@ def approve_card():
     conn = get_db_connection()
     if conn:
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s', ('W',))
+        cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s ORDER BY c.issuedate DESC', ('W',))
         card_requests = cursor.fetchall()
-        cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s', ('A',))
+        cursor.execute('SELECT * FROM Creditcard c Join Branch b ON c.branchid = b.branchid JOIN banker ba ON b.bankerid = ba.bankerid WHERE c.Status = %s ORDER BY c.issuedate DESC', ('A',))
         approved_card = cursor.fetchall()
         conn.close()
         return render_template('approve_credit_card.html', card_requests=card_requests, approved_card=approved_card)

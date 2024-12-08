@@ -23,8 +23,8 @@
             <td>{{ loan[0] }}</td>
             <td>{{ loan[1] }}</td>
             <td>{{ loan[2] }}</td>
-            <td>{{ loan[3] }}</td>
-            <td>{{ loan[4] }}</td>
+            <td>{{ loan[6] }} months</td>
+            <td>{{ loan[7] }}</td>
             <td>
                 <form action="{{ url_for('admin.approve_single_loan', loan_id=loan[0]) }}" method="post">
                     <button type="submit">Approve</button>
@@ -47,8 +47,8 @@
             <td>{{ loan[0] }}</td>
             <td>{{ loan[1] }}</td>
             <td>{{ loan[2] }}</td>
-            <td>{{ loan[3] }}</td>
-            <td>{{ loan[4] }}</td>
+            <td>{{ loan[6] }} months</td>
+            <td>{{ loan[7] }}</td>
         </tr>
         {% endfor %}
     </table>
