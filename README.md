@@ -89,7 +89,7 @@ The system employs a combination of application-level and database-level locking
 On the database side, SQL LOCK TABLE statements are used to secure exclusive access to critical tables like customer and account during bulk operations. This prevents other transactions from reading or modifying these tables while data import or update processes are in progress. By acquiring these locks, the system ensures that data remains consistent even in high-concurrency environments. To minimize the potential impact on system performance, locks are released promptly after the operation concludes. These locking strategies collectively provide robust safeguards against data conflicts and maintain the integrity of operations in a multi-user environment.
 
 ## DEMO Video
-[![Watch the video](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/vt5fpE0bzSY)
+[![Video Title](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
 ## 執行辦法
 `python app.py`
 
