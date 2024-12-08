@@ -7,6 +7,7 @@ import uuid
 from datetime import timedelta
 from flask import Flask, session
 from db import get_db_connection
+import random
 user_bp = Blueprint('user', __name__)  # Define the blueprint for user routes
 
 
@@ -275,7 +276,7 @@ def loan():
         }
     
         data['LoanID'] = str(uuid.uuid4()).replace("-", "")[:15]  
-        data['InterestRate'] = 10
+        data['InterestRate'] = round(random.uniform(0.00, 5.00), 2)
         data['StartDate'] = datetime.now().strftime('%Y-%m-%d')  
         data['Status'] = 'W'
 
