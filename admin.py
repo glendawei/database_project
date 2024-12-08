@@ -290,7 +290,11 @@ def account_info():
 
     return render_template('account_info.html', account=account_details, loans=loan_details, creditcards=creditcard_details)
 
-# Approve loan request
+
+from decimal import Decimal, getcontext
+from dateutil.relativedelta import relativedelta
+from flask import flash, redirect, url_for
+
 @admin_bp.route('/approve_loan/<loan_id>', methods=['POST'])
 def approve_single_loan(loan_id):
     """Approve a single loan and generate loan payments."""
@@ -319,14 +323,23 @@ def approve_single_loan(loan_id):
 
         # Extract loan details
         principal, rate, duration, start_date = loan_details
+
+        # Ensure precision handling with Decimal
+        principal = Decimal(principal)
+        rate = Decimal(rate)
+        duration = int(duration)  # Ensure duration is an integer
+
         print(f"Loan Details - Loan ID: {loan_id}, Principal: {principal}, Rate: {rate}, Duration: {duration}, Start Date: {start_date}")
 
         # Update loan status to 'A' (Approved)
         cursor.execute('UPDATE Loan SET status = %s WHERE loanid = %s', ('A', loan_id))
 
         # Generate loan payments
-        monthly_rate = rate / 100.0 / 12
-        monthly_payment = principal * monthly_rate * (1 + monthly_rate)**duration / ((1 + monthly_rate)**duration - 1)
+        getcontext().prec = 28  # Set precision for Decimal calculations
+        monthly_rate = rate / Decimal('100.0') / Decimal('12')
+        monthly_payment = (
+            principal * monthly_rate * (1 + monthly_rate) ** duration
+        ) / ((1 + monthly_rate) ** duration - 1)
         remaining_balance = principal
         payment_date = start_date
 
@@ -345,7 +358,7 @@ def approve_single_loan(loan_id):
                 INSERT INTO loanpayment (paymentid, loanid, paymentdate, amount, status, interestpaid, principlepaid)
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
                 ''',
-                (payment_id, loan_id, payment_date, monthly_payment, 'U', interest_paid, principal_paid)
+                (payment_id, loan_id, payment_date, float(monthly_payment), 'U', float(interest_paid), float(principal_paid))
             )
 
             print(f"Inserted Payment {payment_id} - Date: {payment_date}, Amount: {monthly_payment}")
