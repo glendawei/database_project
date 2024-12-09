@@ -39,8 +39,11 @@ This is the database final project for the NTUIM course. We implemented a bank s
 
 # DEMO Video
 # Development Environment
-macOS
-PostgreSQL
+-macOS
+-PostgreSQL: 16.4
+-python 3.12.7
+
+
 
 
 
