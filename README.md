@@ -2,6 +2,11 @@
 This is the database final project for the NTUIM course. We implemented a bank system called **IMBANK** using PostgreSQL, Flask, and simple HTML.
 
 ## DEMO Video
+## Development Environment
+macOS
+PostgreSQL
+
+
 
 ## Execution Method  
 1. Install the necessary libraries:  
