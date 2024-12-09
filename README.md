@@ -53,7 +53,7 @@ This is the database final project for the NTUIM course. We implemented a bank s
 # Execution Method  
 1. Install the necessary libraries:  
    ```bash
-   python app.py
+   pip install requirement.txt
    ```
    
 2. run the project using the following command:
