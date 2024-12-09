@@ -6,10 +6,12 @@ This is the database final project for the NTUIM course. We implemented a bank s
 ## Execution Method  
 1. Install the necessary libraries:  
    ```bash
-   pip install -r requirements.txt
    python app.py
    ```
    
-
+2. run the project using the following command:
+      ```bash
+   python app.py
+   ```
 
 
