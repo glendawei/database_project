@@ -55,6 +55,12 @@ def create_indexes():
             ON openinghour(day);
         """)
 
+        # Create index on status in the loan table, if it doesn't already exist
+        cur.execute("""
+            CREATE INDEX IF NOT EXISTS idx_loan_status 
+            ON LOAN (Status);
+        """)
+
         # Optional: Create composite index on bankerid and branchid in the branch table, if it doesn't already exist
         cur.execute("""
             CREATE INDEX IF NOT EXISTS idx_branch_bankerid_branchid 
@@ -66,7 +72,6 @@ def create_indexes():
             CREATE INDEX IF NOT EXISTS idx_openinghour_branchid_day 
             ON openinghour(branchid, day);
         """)
-   
 
         # Commit the changes to the database
         conn.commit()
