@@ -78,12 +78,20 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
    - **Concurrency Control**:  
      - Multiple locks are implemented to maintain data consistency, particularly during critical operations such as transactions, preventing race conditions and ensuring integrity.
 # DEMO Video
-# Development Environment
 
-- **Operating System**: macOS  
-- **Database**: PostgreSQL 16.4  
-- **Programming Language**: Python 3.12.7 (Anaconda)  
-  - **Key Library**: psycopg2 2.9.10  
+
+# Development Environment:
+
+- **Operating System**: macOS 14.4.1
+- **Python Version**: 3.12.7
+- **PostgreSQL Version**: PostgreSQL 17.0 (compiled by Apple clang version 16.0.0)
+- **Psycopg2 Version**: 2.9.10 (installed via Anaconda, also includes `psycopg2-binary` version 2.9.10)
+- **Dependencies**:
+  - `psycopg2==2.9.6`
+  - `Werkzeug==2.2.3`
+  - `Faker==18.6.1`
+  - `python-dateutil==2.8.2`
+- **IDE**: VS Code, running in an Anaconda environment.
 
 
 
