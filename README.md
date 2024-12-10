@@ -39,18 +39,15 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
 
 - ## Admin Functions
-   - **Import Users**:  
-      Add new user data.  
-   -  **Manage Accounts**:  
-      Approve, freeze, or adjust accounts.  
-   -  **Loan Setup**:  
-      Set loan terms based on user credit.  
-   -  **Credit Card Management**:  
-      Adjust limits and generate unique card numbers.  
-   -  **Repayment Tracking**:  
-      Monitor repayment progress.  
-    - **Transaction Inquiry**:  
-      Review user transactions to enhance services.
+   
+   1. **Import User Information**: Import new user data into the system.
+   2. **Manage Accounts**: Filter and view individual account information, including assets and transaction records.
+   3. **Manage Loans**: Assess user credit based on borrowing history and loan purpose to decide whether to approve loans, and view all loan records.
+   4. **Manage Credit Cards**: Approve or deny credit card applications based on users' financial status and spending, and view all credit card information.
+   5. **View Account Transaction History**: View all account transaction records.
+   6. **User Data Analysis**: Set conditions to filter users and obtain statistics on user assets, total loan amounts, total repayments, and more.
+
+
 # Program Explanation
 
    1. **Core Files**:
