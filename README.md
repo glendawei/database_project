@@ -65,8 +65,6 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
 # Execution Method  
 
-### Execution Method
-
    1. **Restore the Database**:  
       Restore the IMBANK database to PostgreSQL and update the `db.py` file with your personal database information.
    
