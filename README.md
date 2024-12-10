@@ -21,7 +21,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       - View transaction records (deposits, transfers).  
       - Manage transfers (set recipient and amount).
    
-   3. **Bank Info Lookup:**  
+   3. **Bank Information Lookup:**  
       Search by bank ID, branch ID, or day to find branch details, including address, phone, and hours.
    
    4. **Loan Application:**  
