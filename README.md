@@ -83,7 +83,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
 
 
-# Development Environment:
+# Development Environment
 
 - **Operating System**: macOS 14.4.1
 - **Python Version**: 3.12.7
