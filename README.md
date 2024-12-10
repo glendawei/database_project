@@ -17,8 +17,6 @@ This is the database final project for the NTUIM course. We implemented a bank s
    Apply for loans with terms set by the bank.  
 -  **Credit Card Application**:  
    Request multiple cards; type chosen by user, others set by the bank.  
--  **Card Transactions**:  
-   Make purchases within credit limits.  
 - **Repayment**:  
    Repay loans or card debts in installments.
 
