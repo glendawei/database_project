@@ -6,22 +6,34 @@ This is the database final project for the NTUIM course. We implemented a bank s
 
 The platform supports two user roles: User and Admin. Users can create multiple accounts across different banks, manage accounts, and perform services like loans, credit card management, and online transactions.  Admins, representing bank staff, can manage loan services, access account details, and review transaction records .
 
+## User Functions in the System
 
-### User Functions
-- **Account Registration**:  
-   Register multiple accounts with custom type (e.g., savings) and currency (default: TWD). Approval required.  
-- **Account Inquiry**:  
-   View account details and transaction history.
-- **Transactions**:  
-   Perform transfers, payments, and receipts.  
-- **Branch Inquiry**:  
-   Access branch details (ID, address, phone, hours).  
--  **Loan Application**:  
-   Apply for loans with terms set by the bank and approved loans.
--  **Credit Card Application**:  
-   Request multiple cards; type chosen by user, others set by the bank.  
-- **Repayment**:  
-   Repay loans or card debts in installments.
+1. **Register Bank Account:**  
+   Users can register online or in person by providing customer ID, account ID, password, branch code, account balance, account type (default: savings), and currency (default: NTD).
+
+2. **Account Login:**  
+   Log in using account ID and password to:  
+   - Check balance.  
+   - View transaction records (deposits, transfers).  
+   - Manage transfers (set recipient and amount).
+
+3. **Bank Info Lookup:**  
+   Search by bank ID, branch ID, or day to find branch details, including address, phone, and hours.
+
+4. **Loan Application:**  
+   Apply for loans by providing customer ID, birthdate, loan type, amount, and duration. Approval and interest rates are managed by the bank.
+
+5. **Loan Repayment:**  
+   Search approved loans and repay. The system calculates and updates principal and interest paid.
+
+6. **Credit Card Application:**  
+   Apply for a credit card by providing customer ID, branch code, and card type (e.g., Visa). Approval is handled by the bank.
+
+7. **Credit Card Services:**  
+   Log in to:  
+   - View transactions (filter by date).  
+   - Pay outstanding bills (select month and amount).
+
 
 ### Admin Functions
 - **Import Users**:  
