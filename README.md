@@ -111,4 +111,4 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       ```
       http://127.0.0.1:<port>
       ```  
-      Replace `<port>` with the port number your application is running on (e.g., `5678`). If the designated port is occupied, you can change the port number in your Flask configuration and try again.
+      Replace `<port>` with the port number your application is running on (default: `5678`). If the designated port is occupied, you can change the port number in your Flask configuration and try again.
