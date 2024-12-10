@@ -4,7 +4,7 @@ This is the database final project for the NTUIM course. We implemented a bank s
 # System Features
 
 
-The platform supports two user roles: User and Admin. Users can create multiple accounts across different banks, manage accounts, and perform services like loans, credit card management, and online transactions.  Admins, representing bank staff, can manage loan services, access account details, and review transaction records .
+The platform supports two user roles: **User** and **Admin**. Users, representing customers, can access key services offered by the bank, including those related to loans, account management, and credit card services. Admins, who represent the bank staff, are responsible for managing loan services, accessing account details, and reviewing transaction records.
 
 ## User Functions in the System
 
