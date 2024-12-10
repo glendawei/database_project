@@ -50,18 +50,17 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       Review user transactions to enhance services.
 # Program Explanation
 
+   1. **Core Files**:
+      - **app.py**: The main entry point of the application. Initializes the Flask app, manages HTTP requests, registers blueprints, and ensures database index creation for optimized queries.
+      - **db.py**: Handles PostgreSQL database connections and interactions, such as retrieving user accounts and transaction data.
    
-   1. **Other Files**:
-      - **app.py**: The main entry point of the application. It initializes the Flask app, handles HTTP requests, and connects to the database. It routes users' requests to the appropriate functions.
-      - **db.py**: Contains the database configuration and manages the connection to the PostgreSQL database. It handles interactions with the database, such as retrieving user accounts, transactions, and loan information.
+   2. **User Functions**:
+      - **user.py**: Manages user-specific operations, including account registration, login, balance checks, transaction history, performing transactions, loan applications, loan history searches, and loan repayments.
+      - **card.py**: Handles credit card operations such as card registration, transaction history retrieval, and monthly bill repayment.
+      - **bank.py**: Provides functionality for customers to search for bank and branch information.
    
-   2. **User**:
-      - **user.py**: This file contains functions specific to user operations, such as registering an account, logging in, checking balances, viewing transaction history, and applying for loans. It handles user-related logic and communicates with the database to perform these actions.
-      - **card.py**:
-      - **bank.py**:
-   
-   3. **Admin**:
-      - **admin.py**: This file is for admin functions. Admins can view and manage user accounts, approve or reject loan applications, and access transaction records. It contains the logic to manage bank services at the administrative level.
+   3. **Admin Functions**:
+      - **admin.py**: Manages administrative operations, including user account management, loan application approvals or rejections, and access to transaction records.
    
    These files work together to create a complete online banking system, with each part handling a specific aspect of the platform.
    # Technical Details
