@@ -3,7 +3,7 @@
 
 
 # Overview  
-This is the database final project for the NTUIM course. We implemented a bank system called **I’m Bank** using PostgreSQL, Flask, and simple HTML. **I’m Bank** is a platform that provides various online financial services for both banks and customers. Its primary purpose is to enable customers of different banks to manage their personal bank accounts, access account information, and utilize a range of financial services.
+This is the database final project for the NTUIM course. We implemented a bank system called **" I’m Bank "** using PostgreSQL, Flask, and simple HTML. **" I’m Bank "** is a platform that provides various online financial services for both banks and customers. Its primary purpose is to enable customers of different banks to manage their personal bank accounts, access account information, and utilize a range of financial services.
 
 # System Features
 
