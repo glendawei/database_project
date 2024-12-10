@@ -37,7 +37,7 @@ def register_account():
             'BranchID': request.form.get('BranchID'),
             'DateOpened': datetime.now().strftime('%Y-%m-%d'),  # 預設為今天日期
             'InterestRate': request.form.get('InterestRate', 0.1),  # 轉換為 int
-            'Status': request.form.get('Status', 'C'),  # 預設為 0，轉換為 int
+            'Status': request.form.get('Status', 'A'),  # 預設為 0，轉換為 int
             'CustomerID': request.form.get('CustomerID'),
             'Balance': int(request.form.get('Balance', 0)),  # 預設為 0，轉換為 bigint
             'Currency': request.form.get('Currency', 'TWD'),  # 預設為 TWD

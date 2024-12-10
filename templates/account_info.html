@@ -22,15 +22,15 @@
         </tr>
         <tr>
             <td>Customer ID</td>
-            <td>{{ account[1] }}</td>
+            <td>{{ account[10] }}</td>
         </tr>
         <tr>
             <td>Balance</td>
-            <td>{{ account[2] }}</td>
+            <td>{{ account[3] }}</td>
         </tr>
         <tr>
             <td>Currency</td>
-            <td>{{ account[3] }}</td>
+            <td>{{ account[5] }}</td>
         </tr>
         <tr>
             <td>Branch ID</td>
@@ -38,14 +38,10 @@
         </tr>
         <tr>
             <td>Status</td>
-            <td>{{ account[5] }}</td>
+            <td>{{ account[9] }}</td>
         </tr>
         <tr>
-            <td>Creation Date</td>
-            <td>{{ account[6] }}</td>
-        </tr>
-        <tr>
-            <td>Last Transaction Date</td>
+            <td>Opened Date</td>
             <td>{{ account[7] }}</td>
         </tr>
     </table>
@@ -94,14 +90,14 @@
             </tr>
             <tr>
                 <td>{{ card[0] }}</td>
-                <td>{{ card[1] }}</td>
                 <td>{{ card[2] }}</td>
                 <td>{{ card[3] }}</td>
                 <td>{{ card[4] }}</td>
                 <td>{{ card[5] }}</td>
-                <td>{{ card[6] }}</td>
                 <td>{{ card[7] }}</td>
-
+                <td>{{ card[8] }}</td>
+                <td>{{ card[9] }}</td>
+                <td>{{ card[10] }}</td>
             </tr>
             {% endfor %}
         {% else %}

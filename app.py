@@ -55,11 +55,11 @@ def create_indexes():
             ON openinghour(day);
         """)
 
-        # Create index on status in the loan table, if it doesn't already exist
-        cur.execute("""
-            CREATE INDEX IF NOT EXISTS idx_loan_status 
-            ON LOAN (Status);
-        """)
+        # # Create composite index on status and startdate in the loan table, if it doesn't already exist
+        # cur.execute("""
+        #     CREATE INDEX IF NOT EXISTS idx_loan_status_startdate 
+        #     ON LOAN (Status, StartDate DESC);
+        # """)
 
         # Optional: Create composite index on bankerid and branchid in the branch table, if it doesn't already exist
         cur.execute("""
