@@ -235,6 +235,10 @@ def add_transaction():
                         IF (SELECT Balance FROM ACCOUNT WHERE AccountID = %s FOR UPDATE) < %s THEN
                             RAISE EXCEPTION 'Insufficient balance';
                         ELSE
+                          IF (SELECT Balance FROM ACCOUNT WHERE AccountID = %s FOR UPDATE) IS NULL THEN
+                         RAISE EXCEPTION 'Receiver account not found';
+                         END IF;
+
                             -- Deduct the amount from the sender's account
                             UPDATE ACCOUNT
                             SET Balance = Balance - %s
@@ -245,7 +249,7 @@ def add_transaction():
                             WHERE AccountID = %s;
                         END IF;
                     END $$;
-                """, (session['AccountID'], data['Amount'], data['Amount'], session['AccountID'], data['Amount'], data['TransactionAccount']))
+                """, (session['AccountID'], data['Amount'],data['TransactionAccount'], data['Amount'], session['AccountID'], data['Amount'], data['TransactionAccount']))
 
             conn.commit()
         except Exception as e:
