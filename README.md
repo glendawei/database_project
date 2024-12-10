@@ -53,8 +53,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
    1. **Core Files**:
       - **app.py**: The main entry point of the application. Initializes the Flask app, manages HTTP requests, registers blueprints, and ensures database index creation for optimized queries.
-      - **db.py**: Handles PostgreSQL database connections and interactions, such as retrieving user accounts and transaction data.
-   
+      - **db.py**: Provides a utility function to establish a connection to the PostgreSQL IMBANK database.
    2. **User Functions**:
       - **user.py**: Manages user-specific operations, including account registration, login, balance checks, transaction history, performing transactions, loan applications, loan history searches, and loan repayments.
       - **card.py**: Handles credit card operations such as card registration, transaction history retrieval, and monthly bill repayment.
