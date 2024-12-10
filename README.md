@@ -63,7 +63,20 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       - **admin.py**: Manages administrative operations, including user account management, loan application approvals or rejections, and access to transaction records.
    
    These files work together to create a complete online banking system, with each part handling a specific aspect of the platform.
-   # Technical Details
+# Technical Details
+
+   - **Session Management**: Flask's session handling is secured using a secret key to sign cookies, HTTPS-only cookie transmission, and restricted HTTP-only access. Sessions have a 30-minute lifetime to enhance security and manage user interactions effectively. Each user's session is tied to a unique session ID, ensuring that user logins do not override across different windows or browsers.
+   
+   - **Blueprints**: Flask Blueprints are used to modularize the application. Separate blueprints handle specific functionalities (e.g., user, admin, bank, and card operations), improving code organization and scalability.
+   
+   - **Database**: PostgreSQL is used as the database, with Psycopg2 facilitating interactions.
+   
+   - **Transaction Management**:  
+     - If a violation of table constraints occurs during a write operation, the transaction is immediately stopped, and a **ROLLBACK** is executed to undo all changes.  
+     - Upon successful completion, a **COMMIT** is issued to ensure all changes are permanently saved.
+   
+   - **Concurrency Control**:  
+     - Multiple locks are implemented to maintain data consistency, particularly during critical operations such as transactions, preventing race conditions and ensuring integrity.
 # DEMO Video
 # Development Environment
 
