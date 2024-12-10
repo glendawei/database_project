@@ -57,6 +57,8 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
    
    2. **User**:
       - **user.py**: This file contains functions specific to user operations, such as registering an account, logging in, checking balances, viewing transaction history, and applying for loans. It handles user-related logic and communicates with the database to perform these actions.
+      - **card.py**:
+      - **bank.py**:
    
    3. **Admin**:
       - **admin.py**: This file is for admin functions. Admins can view and manage user accounts, approve or reject loan applications, and access transaction records. It contains the logic to manage bank services at the administrative level.
