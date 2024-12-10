@@ -65,7 +65,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
    These files work together to create a complete online banking system, with each part handling a specific aspect of the platform.
 # Technical Details
 
-   - **Session Management**: Flask's session handling is secured using a secret key to sign cookies, HTTPS-only cookie transmission, and restricted HTTP-only access. Sessions have a 30-minute lifetime to enhance security and manage user interactions effectively. Each user's session is tied to a unique session ID, ensuring that user logins do not override across different windows or browsers.
+   - **Session Management**: Flask’s session handling is secured with a secret key to sign cookies, HTTPS-only transmission, and restricted HTTP-only access. Sessions are configured with a 30-minute lifetime for better security and user interaction management. To prevent session data from being overwritten on the same machine, use different browsers (e.g., Chrome and Safari) or one in normal mode and one in incognito mode.
    
    - **Blueprints**: Flask Blueprints are used to modularize the application. Separate blueprints handle specific functionalities (e.g., user, admin, bank, and card operations), improving code organization and scalability.
    
