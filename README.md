@@ -79,7 +79,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
    - **Concurrency Control**:  
      - Multiple locks are implemented to maintain data consistency, particularly during critical operations such as transactions, preventing race conditions and ensuring integrity.
 # DEMO Video
-       [![Demo Video](https://img.youtube.com/vi/oKar-tF__ac/0.jpg)](https://www.youtube.com/watch?v=oKar-tF__ac)
+ [![Demo Video](https://img.youtube.com/vi/oKar-tF__ac/0.jpg)](https://www.youtube.com/watch?v=oKar-tF__ac)
 
 
 
