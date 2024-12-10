@@ -122,3 +122,6 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       ```  
       Replace `<port>` with the port number your application is running on (default: `5678`). If the designated port is occupied, you can change the port number in your Flask configuration and try again.
 
+# Reference
+The README.md file is based on the "資料庫管理（113-1）期末專案完整報告."
+
