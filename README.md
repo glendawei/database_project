@@ -106,10 +106,9 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       ```bash
       python app.py
       ```
-   
    4. **Access the Application**:  
-      Once the application is running, open your browser (Google Chrome, Safari, or any other browser) and navigate to the local address:  
+      Once the application is running, open your browser (e.g., Google Chrome, Safari) and navigate to the following address:  
       ```
-      http://127.0.0.1:port
+      http://127.0.0.1:<port>
       ```  
-      This will allow you to view and interact with the project locally.
+      Replace `<port>` with the port number your application is running on (e.g., `5678`). If the designated port is occupied, you can change the port number in your Flask configuration and try again.
