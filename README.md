@@ -60,7 +60,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       - **bank.py**: Provides functionality for customers to search for bank and branch information.
    
    3. **Admin Functions**:
-      - **admin.py**: Manages administrative operations, including user account management, loan application approvals or rejections, and access to transaction records.
+      - **admin.py**: Manages admin tasks such as importing user information, handling user accounts, processing loan and credit card applications, reviewing transaction records, and performing user data analysis. These functions are key to overseeing the banking system's operations and generating insights.
    
    These files work together to create a complete online banking system, with each part handling a specific aspect of the platform.
 # Technical Details
