@@ -55,7 +55,7 @@ The platform supports two user roles: User and Admin. Users can create multiple 
 # Execution Method  
 1. Install the necessary libraries:  
    ```bash
-   pip install requirement.txt
+   pip install requirements.txt
    ```
    
 2. run the project using the following command:
