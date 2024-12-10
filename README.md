@@ -119,7 +119,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       python app.py
       ```
    4. **Access the Application**:  
-      Once the application is running, open on Google Chrome and navigate to the following address:  
+      Once the application is running,  open it in Google Chrome (do not use Safari, as the Flask application with session keys may not function properly in Safari) and navigate to the following address:
       ```
       http://127.0.0.1:<port>
       ```  
