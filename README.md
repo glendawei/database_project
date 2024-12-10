@@ -66,11 +66,11 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
    # Technical Details
 # DEMO Video
 # Development Environment
-- macOS
-- PostgreSQL: 16.4
-- python 3.12.7
-  - psycopg2: 2.9.10
 
+- **Operating System**: macOS  
+- **Database**: PostgreSQL 16.4  
+- **Programming Language**: Python 3.12.7 (Anaconda)  
+  - **Key Library**: psycopg2 2.9.10  
 
 
 
