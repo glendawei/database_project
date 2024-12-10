@@ -1,7 +1,11 @@
 # Overview  
-This is the database final project for the NTUIM course. We implemented a bank system called **IMBANK** using PostgreSQL, Flask, and simple HTML.
+This is the database final project for the NTUIM course. We implemented a bank system called **IMBANK** using PostgreSQL, Flask, and simple HTML. **IMBANK** is an online platform designed to help users manage financial services conveniently without visiting a physical bank. It aims to address the inconvenience caused by traditional banking hours conflicting with the schedules of working professionals and students.
 
 # System Features
+
+
+The platform supports two user roles: User and Admin. Users can create multiple accounts across different banks, manage accounts, and perform services like loans, credit card management, and online transactions. Each service requires selecting an account and providing the necessary information. Admins, representing bank staff, can manage loan services, access account details, and review transaction records for their respective banks.
+
 
 ## User Functions
 - **Account Registration**:  
