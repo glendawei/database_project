@@ -21,7 +21,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       - View transaction records (deposits, transfers).  
       - Manage transfers (set recipient and amount).
    
-   3. **Bank Info Lookup:**  
+   3. **Bank Information Lookup:**  
       Search by bank ID, branch ID, or day to find branch details, including address, phone, and hours.
    
    4. **Loan Application:**  
@@ -53,8 +53,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
    1. **Core Files**:
       - **app.py**: The main entry point of the application. Initializes the Flask app, manages HTTP requests, registers blueprints, and ensures database index creation for optimized queries.
-      - **db.py**: Handles PostgreSQL database connections and interactions, such as retrieving user accounts and transaction data.
-   
+      - **db.py**: Provides a utility function to establish a connection to the PostgreSQL IMBANK database.
    2. **User Functions**:
       - **user.py**: Manages user-specific operations, including account registration, login, balance checks, transaction history, performing transactions, loan applications, loan history searches, and loan repayments.
       - **card.py**: Handles credit card operations such as card registration, transaction history retrieval, and monthly bill repayment.
@@ -66,7 +65,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
    These files work together to create a complete online banking system, with each part handling a specific aspect of the platform.
 # Technical Details
 
-   - **Session Management**: Flask’s session handling is secured with a secret key to sign cookies, HTTPS-only transmission, and restricted HTTP-only access. Sessions are configured with a 30-minute lifetime for better security and user interaction management. To prevent session data from being overwritten on the same machine, use different browsers (e.g., Chrome and Safari) or one in normal mode and one in incognito mode.
+   - **Session Management**: Flask’s session handling is secured with a secret key to sign cookies, HTTPS-only transmission, and restricted HTTP-only access. Sessions are configured with a 30-minute lifetime for better security and user interaction management. To prevent session data from being overwritten on the same machine, use one in normal mode and one in incognito mode in google chrome
    
    - **Blueprints**: Flask Blueprints are used to modularize the application. Separate blueprints handle specific functionalities (e.g., user, admin, bank, and card operations), improving code organization and scalability.
    
@@ -84,7 +83,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
 
 
-# Development Environment:
+# Development Environment
 
 - **Operating System**: macOS 14.4.1
 - **Python Version**: 3.12.7
@@ -119,7 +118,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       python app.py
       ```
    4. **Access the Application**:  
-      Once the application is running, open your browser (e.g., Google Chrome, Safari) and navigate to the following address:  
+      Once the application is running,  open it in Google Chrome (do not use Safari, as the Flask application with session keys may not function properly in Safari) and navigate to the following address:
       ```
       http://127.0.0.1:<port>
       ```  
