@@ -35,7 +35,7 @@ The platform supports two user roles: User and Admin. Users can create multiple 
    - Pay outstanding bills (select month and amount).
 
 
-### Admin Functions
+## Admin Functions
 - **Import Users**:  
    Add new user data.  
 -  **Manage Accounts**:  
