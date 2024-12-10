@@ -266,10 +266,10 @@ def generate_monthly_bills():
 
         # Update the last update date for the card
         cur.execute("""
-            UPDATE creditcard
-            SET lastupdate = %s
-            WHERE cardid = %s
-       
+                UPDATE creditcard
+                SET lastupdate = %s
+                WHERE cardid = %s
+
         """, (first_day_of_this_month, session['card_id']))
 
         conn.commit()
@@ -328,6 +328,7 @@ def repayment():
                     SELECT totalAmount, paidAmount
                     FROM MONTHLYBILL
                     WHERE CreditCardID = %s AND BillMonth = %s
+                    For update
                 """, (card_id, bill_month))
                 bill = cur.fetchone()
 
@@ -345,8 +346,8 @@ def repayment():
                             UPDATE MONTHLYBILL
                             SET paidAmount = paidAmount + %s
                             WHERE CreditCardID = %s AND BillMonth = %s
+         
                         """, (payment_amount, card_id, bill_month))
-
                         paymentid =generate_unique_payment_id()
 
                         # 紀錄還款操作
