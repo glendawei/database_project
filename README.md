@@ -39,7 +39,7 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       - Pay outstanding bills (select month and amount).
 
 
-- ## Admin Functions
+- ## Admin Functions in the System
    
    1. **Import User Information**: Import new user data into the system.
    2. **Manage Accounts**: Filter and view individual account information, including assets and transaction records.
@@ -121,3 +121,4 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
       http://127.0.0.1:<port>
       ```  
       Replace `<port>` with the port number your application is running on (default: `5678`). If the designated port is occupied, you can change the port number in your Flask configuration and try again.
+
