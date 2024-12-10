@@ -64,12 +64,18 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
 
 # Execution Method  
-1. Install the necessary libraries:  
+1.**Restore the Database:**
+Restore the IMBANK database to PostgreSQL and update the db.py file with your personal database information.
+
+2.**Install Dependencies:**
+Install the required modules and libraries by running the following command:
+ 
    ```bash
    pip install requirements.txt
    ```
    
-2. run the project using the following command:
+3.**Run the Project:**
+Start the project by running the following command:
       ```bash
    python app.py
    ```
