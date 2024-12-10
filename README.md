@@ -64,20 +64,27 @@ The platform supports two user roles: **User** and **Admin**. Users, representin
 
 
 # Execution Method  
-1.**Restore the Database:**
-Restore the IMBANK database to PostgreSQL and update the db.py file with your personal database information.
 
-2.**Install Dependencies:**
-Install the required modules and libraries by running the following command:
- 
+### Execution Method
+
+1. **Restore the Database**:  
+   Restore the IMBANK database to PostgreSQL and update the `db.py` file with your personal database information.
+
+2. **Install Dependencies**:  
+   Install the required modules and libraries by running the following command:  
    ```bash
-   pip install requirements.txt
+   pip install -r requirements.txt
    ```
-   
-3.**Run the Project:**
-Start the project by running the following command:
-      ```bash
+
+3. **Run the Project**:  
+   Start the project by running the following command:  
+   ```bash
    python app.py
    ```
 
-
+4. **Access the Application**:  
+   Once the application is running, open your browser (Google Chrome, Safari, or any other browser) and navigate to the local address:  
+   ```
+   http://127.0.0.1:port
+   ```  
+   This will allow you to view and interact with the project locally.
