@@ -16,9 +16,8 @@ The platform supports two user roles: User and Admin. Users can create multiple 
    Perform transfers, payments, and receipts.  
 - **Branch Inquiry**:  
    Access branch details (ID, address, phone, hours).  
-
 -  **Loan Application**:  
-   Apply for loans with terms set by the bank.  
+   Apply for loans with terms set by the bank and approved loans.
 -  **Credit Card Application**:  
    Request multiple cards; type chosen by user, others set by the bank.  
 - **Repayment**:  
